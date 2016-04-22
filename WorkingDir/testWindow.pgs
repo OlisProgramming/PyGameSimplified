@@ -1,0 +1,7 @@
+class testWindow
+begin
+    function display
+    begin
+        write "on."
+    end
+end

@@ -13,7 +13,6 @@ class Interpreter(object):
         self.arg1, self.arg2, self.arg3, self.arg4 = None, None, None, None
         self.indent = 0  # How many tabs of indent are there at this point in code
         self.eof = False
-        self.to_parse = ["test.pgs"]
         self.current_token = self.get_next_token()
 
     @staticmethod
@@ -91,6 +90,10 @@ class Interpreter(object):
                     return Token(VAR_SET, word)
                 elif word == "to":
                     return Token(VAR_TO, word)
+                elif word == "make":
+                    return Token(VAR_MAKE, word)
+                elif word == "called":
+                    return Token(VAR_CALLED, word)
                 elif word == "true":
                     return Token(VAR_TRUE, word)
                 elif word == "false":
@@ -184,9 +187,7 @@ class Interpreter(object):
         elif self.eat(KWD_IMPORT):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
-                if not self.arg2.value + ".pgs" in self.to_parse:
-                    self.to_parse.append(self.arg2.value + ".pgs")
-                return "import " + self.arg2.value  # Mainfunction Begin
+                return "from WorkingDir." + self.arg2.value + " import *"  # Mainfunction Begin
             else:
                 self.invalid(2)
 
@@ -218,6 +219,21 @@ class Interpreter(object):
                         return self.arg2.value + ' = True'  # Set Str to True
                     elif self.eat(VAR_FALSE):
                         return self.arg2.value + ' = False'  # Set Str to False
+                    else:
+                        self.invalid(4)
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(VAR_MAKE):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(VAR_CALLED):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        return self.arg4.value + " = " + self.arg2.value + "()"  # Make Str Called Str
                     else:
                         self.invalid(4)
                 else:
@@ -278,19 +294,18 @@ class Interpreter(object):
 
 
 def main():
-    try:
-        file = open("test.pgs")
-        text = file.read()
-        file.close()
-        if not text:
+    projfile = open(".pgsproject")
+    files = projfile.read().splitlines()
+    for file_name in files:
+        try:
+            file = open(file_name + '.pgs')
+            text = file.read()
+            file.close()
+            if not text:
+                quit()
+        except EOFError:
             quit()
-    except EOFError:
-        quit()
-
-    interpreter = Interpreter(text)
-    index = 0
-    while index < len(interpreter.to_parse):
-        file_name = interpreter.to_parse[0]
+        interpreter = Interpreter(text)
         indent_new = 0
         full_result = ''
         while not interpreter.eof:
@@ -310,12 +325,10 @@ def main():
 
         full_result = full_result.strip()
         full_result += '\n'
-        print(full_result)
-        print("." + file_name)
-        file_out = open(file_name[0:-3] + 'py', mode='w')
+
+        file_out = open(file_name + '.py', mode='w')
         file_out.write(full_result)
         file_out.close()
-        index += 1
 
 
 if __name__ == '__main__':
