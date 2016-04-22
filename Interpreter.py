@@ -1,0 +1,322 @@
+from tks.Token import *
+
+
+class Interpreter(object):
+    def __init__(self, text):
+        # client string input, e.g. "3 + 5", "12 - 5", etc
+        self.text = text
+        # self.pos is an index of self.text
+        self.pos = 0
+        # current token instance
+        self.current_token = None
+        self.current_char = self.text[self.pos]
+        self.arg1, self.arg2, self.arg3, self.arg4 = None, None, None, None
+        self.indent = 0  # How many tabs of indent are there at this point in code
+        self.eof = False
+        self.to_parse = ["test.pgs"]
+        self.current_token = self.get_next_token()
+
+    @staticmethod
+    def error(string):
+        raise Exception('\n\nError parsing input: ' + string)
+
+    def advance(self):
+        """Advance the 'pos' pointer and set the 'current_char' variable."""
+        self.pos += 1
+        if self.pos > len(self.text) - 1:
+            self.current_char = None  # Indicates end of input
+        else:
+            self.current_char = self.text[self.pos]
+
+    def skip_whitespace(self):
+        while self.current_char is not None and self.current_char.isspace():
+            self.advance()
+
+    def number(self):
+        """Return a (multidigit) number consumed from the input."""
+        result = ''
+        while self.current_char is not None and (self.current_char.isdigit() or self.current_char == '.'):
+            result += self.current_char
+            self.advance()
+        return float(result)
+
+    def string(self):
+        """Return a string consumed from the input."""
+        result = ''
+        while self.current_char is not None and self.current_char.isalpha():
+            result += self.current_char
+            self.advance()
+        return result
+
+    def string_literal(self):
+        """Return a string literal (e.g. "hello") consumed from the input."""
+        result = ''
+        while self.current_char is not None and not self.current_char == '"':
+            result += self.current_char
+            self.advance()
+        self.advance()
+        return result
+
+    def get_next_token(self):
+        """Lexical analyzer (also known as scanner or tokenizer)
+
+        This method is responsible for breaking a sentence
+        apart into tokens.
+        """
+        while self.current_char is not None:
+
+            if self.current_char.isspace():
+                self.skip_whitespace()
+                continue
+
+            if self.current_char.isdigit():
+                return Token(MATH_NUMBER, self.number())
+
+            if self.current_char.isalpha():
+                word = self.string()
+
+                if word == "endprogram":
+                    return Token(KWD_ENDPROGRAM, word)
+                elif word == "function":
+                    return Token(KWD_FUNCTION, word)
+                elif word == "mainfunction":
+                    return Token(KWD_MAINFUNCTION, word)
+                elif word == "import":
+                    return Token(KWD_IMPORT, word)
+
+                elif word == "class":
+                    return Token(CLA_CLASS, word)
+
+                elif word == "set":
+                    return Token(VAR_SET, word)
+                elif word == "to":
+                    return Token(VAR_TO, word)
+                elif word == "true":
+                    return Token(VAR_TRUE, word)
+                elif word == "false":
+                    return Token(VAR_FALSE, word)
+
+                elif word == "write":
+                    return Token(FUN_WRITE, word)
+                elif word == "on":
+                    return Token(FUN_ON, word)
+                elif word == "run":
+                    return Token(FUN_RUN, word)
+
+                elif word == "begin":
+                    return Token(MISC_BEGIN, word)
+                elif word == "end":
+                    return Token(MISC_END, word)
+                else:
+                    return Token(MISC_STRING, word)  # Class / Variable name
+
+            if self.current_char == '+':
+                self.advance()
+                return Token(MATH_PLUS, '+')
+
+            if self.current_char == '-':
+                self.advance()
+                return Token(MATH_MINUS, '-')
+
+            if self.current_char == '"':
+                self.advance()
+                return Token(MISC_STRING_LITERAL, self.string_literal())
+
+            Interpreter.error("Invalid token (Valid types are e.g. NUMBER, PLUS, MINUS etc.)")
+
+        self.eof = True
+        return Token(MISC_EOF, None)
+
+    def eat(self, token_type):
+        # compare the current token type with the passed token
+        # type and if they match then "eat" the current token
+        # and assign the next token to the self.current_token,
+        # otherwise return false.
+        if self.current_token.type == token_type:
+            self.current_token = self.get_next_token()
+            return True
+        return False
+
+    def expr(self):
+        self.arg1 = self.current_token
+        if self.eat(MATH_NUMBER):
+            self.arg2 = self.current_token
+            if self.eat(MATH_PLUS):
+                self.arg3 = self.current_token
+                if self.eat(MATH_NUMBER):  # Num + Num
+                    return str(self.arg1.value + self.arg3.value)
+                else:
+                    self.invalid(3)  # Num + ...
+
+            elif self.eat(MATH_MINUS):
+                self.arg3 = self.current_token
+                if self.eat(MATH_NUMBER):  # Num - Num
+                    return str(self.arg1.value - self.arg3.value)
+                else:
+                    self.invalid(3)  # Num - ...
+
+            else:
+                self.invalid(2)  # Num ...
+
+        elif self.eat(KWD_FUNCTION):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    return "def " + self.arg2.value + "(self):"  # Function Str Begin
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_MAINFUNCTION):
+            self.arg2 = self.current_token
+            if self.eat(MISC_BEGIN):
+                self.indent += 1
+                return "if __name__ == '__main__':"  # Mainfunction Begin
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_ENDPROGRAM):
+            return "quit()"
+
+        elif self.eat(KWD_IMPORT):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                if not self.arg2.value + ".pgs" in self.to_parse:
+                    self.to_parse.append(self.arg2.value + ".pgs")
+                return "import " + self.arg2.value  # Mainfunction Begin
+            else:
+                self.invalid(2)
+
+        elif self.eat(CLA_CLASS):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    return "class " + self.arg2.value + ":"  # Class Str Begin
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(VAR_SET):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(VAR_TO):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        return self.arg2.value + " = " + self.arg4.value  # Set Str to Str
+                    elif self.eat(MISC_STRING_LITERAL):
+                        return self.arg2.value + ' = "' + self.arg4.value + '"'  # Set Str to StrLit
+                    elif self.eat(MATH_NUMBER):
+                        return self.arg2.value + ' = ' + str(self.arg4.value) + ''  # Set Str to Number
+                    elif self.eat(VAR_TRUE):
+                        return self.arg2.value + ' = True'  # Set Str to True
+                    elif self.eat(VAR_FALSE):
+                        return self.arg2.value + ' = False'  # Set Str to False
+                    else:
+                        self.invalid(4)
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(FUN_WRITE):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING_LITERAL):
+                return "print(\"" + self.arg2.value + "\")"  # Write StrLit
+            if self.eat(MISC_STRING):
+                return "print(str(" + self.arg2.value + "))"  # Write Variable
+            if self.eat(MATH_NUMBER):
+                return "print(str(" + self.arg2.value + "))"  # Write Number
+            else:
+                self.invalid(2)
+
+        elif self.eat(FUN_ON):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(FUN_RUN):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        return self.arg2.value + "." + self.arg4.value + "()"
+                    else:
+                        self.invalid(4)
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(MISC_END):
+            self.indent -= 1
+            return ''  # End
+
+        else:
+            self.invalid(1)
+
+    def invalid(self, args):
+        if args == 1:
+            Interpreter.error("Invalid phrase:\n" + self.arg1.type + "\n" + str(self.arg1.value))
+
+        elif args == 2:
+            Interpreter.error("Invalid phrase\n" + self.arg1.type + " " + self.arg2.type + "\n" +
+                              str(self.arg1.value) + " " + str(self.arg2.value))
+        elif args == 3:
+            Interpreter.error(
+                "Invalid phrase:\n" + self.arg1.type + " " + self.arg2.type + " " + self.arg3.type + "\n" +
+                str(self.arg1.value) + " " + str(self.arg2.value) + " " + str(self.arg3.value))
+
+        elif args == 4:
+            Interpreter.error("Invalid phrase:\n" + self.arg1.type + " " + self.arg2.type + " " +
+                              self.arg3.type + " " + self.arg4.type + "\n" +
+                              str(self.arg1.value) + " " + str(self.arg2.value) +
+                              " " + str(self.arg3.value) + " " + str(self.arg4.value))
+
+
+def main():
+    try:
+        file = open("test.pgs")
+        text = file.read()
+        file.close()
+        if not text:
+            quit()
+    except EOFError:
+        quit()
+
+    interpreter = Interpreter(text)
+    index = 0
+    while index < len(interpreter.to_parse):
+        file_name = interpreter.to_parse[0]
+        indent_new = 0
+        full_result = ''
+        while not interpreter.eof:
+            result = interpreter.expr()
+            if indent_new >= 0:
+                for _ in range(indent_new):
+                    print('    ', end='')
+                    full_result += '    '
+                print(result)
+                full_result += result + '\n'
+                indent_new = interpreter.indent
+            else:
+                Interpreter.error("'end' statement invalid (too many)")
+
+        if indent_new < 0:
+            Interpreter.error("'end' statement expected")
+
+        full_result = full_result.strip()
+        full_result += '\n'
+        print(full_result)
+        print("." + file_name)
+        file_out = open(file_name[0:-3] + 'py', mode='w')
+        file_out.write(full_result)
+        file_out.close()
+        index += 1
+
+
+if __name__ == '__main__':
+    main()
