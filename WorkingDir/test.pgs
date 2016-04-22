@@ -5,5 +5,6 @@ begin
     set greeting to 3.1414592653589793238462643383279502884197169399375105820974944592
     write greeting
     make testWindow called hwnd
-    on hwnd run display
+    run hwnd's display
+    write hwnd's hello
 end

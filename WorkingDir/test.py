@@ -4,3 +4,4 @@ if __name__ == '__main__':
     print(str(greeting))
     hwnd = testWindow()
     hwnd.display()
+    print(str(hwnd.hello))

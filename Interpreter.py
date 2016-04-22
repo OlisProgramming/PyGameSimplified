@@ -28,6 +28,14 @@ class Interpreter(object):
         else:
             self.current_char = self.text[self.pos]
 
+    def reverse(self):
+        """Reverse the 'pos' pointer and set the 'current_char' variable."""
+        self.pos -= 1
+        if self.pos < 0:
+            self.current_char = None  # Indicates start of input
+        else:
+            self.current_char = self.text[self.pos]
+
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
@@ -43,7 +51,7 @@ class Interpreter(object):
     def string(self):
         """Return a string consumed from the input."""
         result = ''
-        while self.current_char is not None and self.current_char.isalpha():
+        while self.current_char is not None and (self.current_char.isalpha() or self.current_char == "'"):
             result += self.current_char
             self.advance()
         return result
@@ -102,8 +110,6 @@ class Interpreter(object):
 
                 elif word == "write":
                     return Token(FUN_WRITE, word)
-                elif word == "on":
-                    return Token(FUN_ON, word)
                 elif word == "run":
                     return Token(FUN_RUN, word)
 
@@ -115,7 +121,11 @@ class Interpreter(object):
                     self.next_token_prefix = "self."
                     continue
                 else:
-                    return Token(MISC_STRING, self.next_token_prefix + word)  # Class / Variable name
+                    if word[-2:] == "'s":
+                        next_token = self.get_next_token()
+                        return Token(MISC_STRING, self.next_token_prefix + word[:-2] + "." + next_token.value)
+                    else:
+                        return Token(MISC_STRING, self.next_token_prefix + word)  # Class / Variable name
 
             if self.current_char == '+':
                 self.advance()
@@ -257,18 +267,10 @@ class Interpreter(object):
             else:
                 self.invalid(2)
 
-        elif self.eat(FUN_ON):
+        elif self.eat(FUN_RUN):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
-                self.arg3 = self.current_token
-                if self.eat(FUN_RUN):
-                    self.arg4 = self.current_token
-                    if self.eat(MISC_STRING):
-                        return self.arg2.value + "." + self.arg4.value + "()"
-                    else:
-                        self.invalid(4)
-                else:
-                    self.invalid(3)
+                return self.arg2.value + "()"
             else:
                 self.invalid(2)
 
