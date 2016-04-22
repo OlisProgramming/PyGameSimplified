@@ -2,6 +2,7 @@ class testWindow
 begin
     function display
     begin
-        write "on."
+        set my hello to "on."
+        write my hello
     end
 end

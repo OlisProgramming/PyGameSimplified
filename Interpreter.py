@@ -14,6 +14,7 @@ class Interpreter(object):
         self.indent = 0  # How many tabs of indent are there at this point in code
         self.eof = False
         self.current_token = self.get_next_token()
+        self.next_token_prefix = ""
 
     @staticmethod
     def error(string):
@@ -110,8 +111,11 @@ class Interpreter(object):
                     return Token(MISC_BEGIN, word)
                 elif word == "end":
                     return Token(MISC_END, word)
+                elif word == "my":
+                    self.next_token_prefix = "self."
+                    continue
                 else:
-                    return Token(MISC_STRING, word)  # Class / Variable name
+                    return Token(MISC_STRING, self.next_token_prefix + word)  # Class / Variable name
 
             if self.current_char == '+':
                 self.advance()
@@ -137,6 +141,7 @@ class Interpreter(object):
         # otherwise return false.
         if self.current_token.type == token_type:
             self.current_token = self.get_next_token()
+            self.next_token_prefix = ""
             return True
         return False
 
