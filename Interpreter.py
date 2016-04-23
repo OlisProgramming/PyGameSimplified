@@ -10,7 +10,8 @@ class Interpreter(object):
         # current token instance
         self.current_token = None
         self.current_char = self.text[self.pos]
-        self.arg1, self.arg2, self.arg3, self.arg4 = None, None, None, None
+        self.arg1, self.arg2, self.arg3, self.arg4, self.arg5, self.arg6, self.arg7 = \
+            None, None, None, None, None, None, None
         self.indent = 0  # How many tabs of indent are there at this point in code
         self.eof = False
         self.current_token = self.get_next_token()
@@ -83,7 +84,10 @@ class Interpreter(object):
             if self.current_char.isalpha():
                 word = self.string()
 
-                if word == "endprogram":
+                if word == "eval":
+                    return Token(MATH_EVAL, word)
+
+                elif word == "endprogram":
                     return Token(KWD_ENDPROGRAM, word)
                 elif word == "function":
                     return Token(KWD_FUNCTION, word)
@@ -244,6 +248,29 @@ class Interpreter(object):
                         return self.arg2.value + ' = True'  # Set Str to True
                     elif self.eat(VAR_FALSE):
                         return self.arg2.value + ' = False'  # Set Str to False
+
+                    elif self.eat(MATH_EVAL):
+                        self.arg5 = self.current_token
+                        if self.eat(MATH_NUMBER) or self.eat(MISC_STRING) or self.eat(MISC_STRING_LITERAL):
+                            self.arg6 = self.current_token
+                            if self.eat(MATH_PLUS):
+                                self.arg7 = self.current_token
+                                if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
+                                    return self.arg2.value + " = " + self.arg5.value + " + " + self.arg7.value
+                                    # Set Str To Eval Num/Var/Str Plus Num/Var/Str
+                                else:
+                                    self.invalid(7)
+                            elif self.eat(MATH_MINUS):
+                                self.arg7 = self.current_token
+                                if self.eat(MATH_NUMBER) or self.eat(MISC_STRING) or self.eat(MISC_STRING_LITERAL):
+                                    return self.arg2.value + " = " + self.arg5.value + " - " + self.arg7.value
+                                    # Set Str To Eval Num/Var/Str Minus Num/Var/Str
+                                else:
+                                    self.invalid(7)
+                            else:
+                                self.invalid(6)
+                        else:
+                            self.invalid(5)
                     else:
                         self.invalid(4)
                 else:
@@ -308,6 +335,29 @@ class Interpreter(object):
                               self.arg3.type + " " + self.arg4.type + "\n" +
                               str(self.arg1.value) + " " + str(self.arg2.value) +
                               " " + str(self.arg3.value) + " " + str(self.arg4.value))
+
+        elif args == 5:
+            Interpreter.error("Invalid phrase:\n" + self.arg1.type + " " + self.arg2.type + " " +
+                              self.arg3.type + " " + self.arg4.type + " " + self.arg5.type + "\n" +
+                              str(self.arg1.value) + " " + str(self.arg2.value) +
+                              " " + str(self.arg3.value) + " " + str(self.arg4.value) + " " +
+                              str(self.arg5.value))
+
+        elif args == 6:
+            Interpreter.error("Invalid phrase:\n" + self.arg1.type + " " + self.arg2.type + " " +
+                              self.arg3.type + " " + self.arg4.type + " " + self.arg5.type + " " +
+                              self.arg6.value + "\n" +
+                              str(self.arg1.value) + " " + str(self.arg2.value) +
+                              " " + str(self.arg3.value) + " " + str(self.arg4.value) + " " +
+                              str(self.arg5.value) + " " + str(self.arg6.value))
+
+        elif args == 7:
+            Interpreter.error("Invalid phrase:\n" + self.arg1.type + " " + self.arg2.type + " " +
+                              self.arg3.type + " " + self.arg4.type + " " + self.arg5.type + " " +
+                              self.arg6.value + " " + self.arg7.value + "\n" +
+                              str(self.arg1.value) + " " + str(self.arg2.value) +
+                              " " + str(self.arg3.value) + " " + str(self.arg4.value) + " " +
+                              str(self.arg5.value) + " " + str(self.arg6.value) + " " + str(self.arg7.value))
 
 
 def main():

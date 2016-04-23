@@ -2,7 +2,8 @@ import testWindow
 
 mainfunction
 begin
-    set greeting to 3.1414592653589793238462643383279502884197169399375105820974944592
+    set howdy to "Howdy! "
+    set greeting to eval howdy + howdy
     write greeting
     make TestWindow called hwnd
     run hwnd's display
