@@ -47,12 +47,16 @@ class Interpreter(object):
         while self.current_char is not None and (self.current_char.isdigit() or self.current_char == '.'):
             result += self.current_char
             self.advance()
+        if int(result) == float(result):
+            return int(result)
         return float(result)
 
     def string(self):
         """Return a string consumed from the input."""
         result = ''
-        while self.current_char is not None and (self.current_char.isalpha() or self.current_char == "'"):
+        while self.current_char is not None and (self.current_char.isalpha() or
+                                                 self.current_char == "'" or
+                                                 self.current_char == "_"):
             result += self.current_char
             self.advance()
         return result
@@ -97,6 +101,8 @@ class Interpreter(object):
                     return Token(KWD_MAINFUNCTION, word)
                 elif word == "import":
                     return Token(KWD_IMPORT, word)
+                elif word == "return":
+                    return Token(KWD_RETURN, word)
 
                 elif word == "class":
                     return Token(CLA_CLASS, word)
@@ -113,6 +119,8 @@ class Interpreter(object):
                     return Token(VAR_TRUE, word)
                 elif word == "false":
                     return Token(VAR_FALSE, word)
+                elif word == "list":
+                    return Token(VAR_LIST, word)
 
                 elif word == "write":
                     return Token(FUN_WRITE, word)
@@ -137,15 +145,23 @@ class Interpreter(object):
                 self.advance()
                 return Token(MATH_PLUS, '+')
 
-            if self.current_char == '-':
+            elif self.current_char == '-':
                 self.advance()
                 return Token(MATH_MINUS, '-')
 
-            if self.current_char == '"':
+            elif self.current_char == '(':
+                self.advance()
+                return Token(MISC_LPARENTH, '(')
+
+            elif self.current_char == ')':
+                self.advance()
+                return Token(MISC_RPARENTH, ')')
+
+            elif self.current_char == '"':
                 self.advance()
                 return Token(MISC_STRING_LITERAL, self.string_literal())
 
-            Interpreter.error("Invalid token (Valid types are e.g. NUMBER, PLUS, MINUS etc.)")
+            Interpreter.error("Invalid token (Valid types are e.g. NUMBER, PLUS, MINUS etc.): got " + self.current_char)
 
         self.eof = True
         return Token(MISC_EOF, None)
@@ -216,7 +232,19 @@ class Interpreter(object):
         elif self.eat(KWD_IMPORT):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
-                return "from WorkingDir." + self.arg2.value + " import *"  # Mainfunction Begin
+                if self.arg2.value == "pygame":
+                    return "import pygame"  # Import Pygame
+                else:
+                    return "from " + self.arg2.value + " import *"  # Mainfunction Begin
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_RETURN):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or self.eat(VAR_FALSE):
+                return "return " + self.arg2.value
+            elif self.eat(MISC_STRING_LITERAL):
+                return "return \"" + self.arg2.value + "\""
             else:
                 self.invalid(2)
 
@@ -251,20 +279,20 @@ class Interpreter(object):
 
                     elif self.eat(MATH_EVAL):
                         self.arg5 = self.current_token
-                        if self.eat(MATH_NUMBER) or self.eat(MISC_STRING) or self.eat(MISC_STRING_LITERAL):
+                        if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
                             self.arg6 = self.current_token
                             if self.eat(MATH_PLUS):
                                 self.arg7 = self.current_token
                                 if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
                                     return self.arg2.value + " = " + self.arg5.value + " + " + self.arg7.value
-                                    # Set Str To Eval Num/Var/Str Plus Num/Var/Str
+                                    # Set Str To Eval Num/Var Plus Num/Var
                                 else:
                                     self.invalid(7)
                             elif self.eat(MATH_MINUS):
                                 self.arg7 = self.current_token
-                                if self.eat(MATH_NUMBER) or self.eat(MISC_STRING) or self.eat(MISC_STRING_LITERAL):
+                                if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
                                     return self.arg2.value + " = " + self.arg5.value + " - " + self.arg7.value
-                                    # Set Str To Eval Num/Var/Str Minus Num/Var/Str
+                                    # Set Str To Eval Num/Var Minus Num/Var
                                 else:
                                     self.invalid(7)
                             else:
@@ -290,6 +318,29 @@ class Interpreter(object):
                         self.invalid(4)
                 else:
                     self.invalid(3)
+            elif self.eat(VAR_LIST):
+                self.arg3.value = self.current_token
+                if self.eat(MISC_LPARENTH):
+                    self.arg4 = self.current_token
+                    self.arg4.value = str(self.arg4.value) + ", "
+                    while self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or self.eat(VAR_FALSE):
+                        self.arg4.value += str(self.current_token.value) + ", "
+                    self.arg5 = self.current_token
+                    if self.eat(MISC_RPARENTH):
+                        self.arg6 = self.current_token
+                        if self.eat(VAR_CALLED):
+                            self.arg7 = self.current_token
+                            if self.eat(MISC_STRING):
+                                return self.arg7.value + " = (" + self.arg4.value[:-5] + ")"
+                                # Make List (...) Called Str
+                            else:
+                                self.invalid(7)
+                        else:
+                            self.invalid(6)
+                    else:
+                        self.invalid(5)
+                else:
+                    self.invalid(3)
             else:
                 self.invalid(2)
 
@@ -297,17 +348,31 @@ class Interpreter(object):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING_LITERAL):
                 return "print(\"" + self.arg2.value + "\")"  # Write StrLit
-            if self.eat(MISC_STRING):
-                return "print(str(" + self.arg2.value + "))"  # Write Variable
-            if self.eat(MATH_NUMBER):
-                return "print(str(" + self.arg2.value + "))"  # Write Number
+            elif self.eat(MISC_STRING) or self.eat(MATH_NUMBER):
+                return "print(str(" + self.arg2.value + "))"  # Write Variable/Number
+            elif self.eat(VAR_TRUE):
+                return "print(\"true\")"  # Write True
+            elif self.eat(VAR_FALSE):
+                return "print(\"false\")"  # Write False
             else:
                 self.invalid(2)
 
         elif self.eat(FUN_RUN):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
-                return self.arg2.value + "()"
+                self.arg3 = self.current_token
+                if self.eat(MISC_LPARENTH):
+                    self.arg4 = self.current_token
+                    self.arg4.value += ", "
+                    while self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or self.eat(VAR_FALSE):
+                        self.arg4.value += str(self.current_token.value) + ", "
+                    self.arg5 = self.current_token
+                    if self.eat(MISC_RPARENTH):
+                        return "result = " + self.arg2.value + "(" + self.arg4.value[:-5] + ")"
+                    else:
+                        self.invalid(5)
+                else:
+                    return "result = " + self.arg2.value + "()"
             else:
                 self.invalid(2)
 
