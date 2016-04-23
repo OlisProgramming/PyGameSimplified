@@ -87,6 +87,8 @@ class Interpreter(object):
                     return Token(KWD_ENDPROGRAM, word)
                 elif word == "function":
                     return Token(KWD_FUNCTION, word)
+                elif word == "initfunction":
+                    return Token(KWD_INITFUNCTION, word)
                 elif word == "mainfunction":
                     return Token(KWD_MAINFUNCTION, word)
                 elif word == "import":
@@ -193,6 +195,14 @@ class Interpreter(object):
             if self.eat(MISC_BEGIN):
                 self.indent += 1
                 return "if __name__ == '__main__':"  # Mainfunction Begin
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_INITFUNCTION):
+            self.arg2 = self.current_token
+            if self.eat(MISC_BEGIN):
+                self.indent += 1
+                return "def __init__(self):"  # Initfunction Begin
             else:
                 self.invalid(2)
 

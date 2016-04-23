@@ -1,8 +1,12 @@
-class testWindow
+class TestWindow
 begin
-    function display
+    initfunction
     begin
         set my hello to "on."
+    end
+
+    function display
+    begin
         write my hello
     end
 end
