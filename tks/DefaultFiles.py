@@ -29,8 +29,7 @@ begin
         run pygame's init
 		make list (640 480) called size
 
-		store pygame's display's set_mode(size)
-		set hwnd to result
+		store pygame's display's set_mode(size) in hwnd
 
 		set title to "PGS Test"
 		run pygame's display's set_caption(title)
@@ -41,8 +40,8 @@ begin
 
 		while running
 		begin
-			store pygame's event's get
-			for event in result
+			store pygame's event's get in eventlist
+			for event in eventlist
 			begin
 				if event's type equals pygame's QUIT
 				begin

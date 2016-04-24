@@ -472,11 +472,25 @@ class Interpreter(object):
                         self.arg4.value += str(self.current_token.value) + ", "
                     self.arg5 = self.current_token
                     if self.eat(MISC_RPARENTH):
-                        return "result = " + self.arg2.value + "(" + self.arg4.value[:-5] + ")"
+                        self.arg6 = self.current_token
+                        if self.eat(KWD_IN):
+                            self.arg7 = self.current_token
+                            if self.eat(MISC_STRING):
+                                return self.arg7.value + " = " + self.arg2.value + "(" + self.arg4.value[:-5] + ")"
+                            else:
+                                self.invalid(7)
+                        else:
+                            self.invalid(6)
                     else:
                         self.invalid(5)
+                elif self.eat(KWD_IN):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        return self.arg4.value + " = " + self.arg2.value + "()"
+                    else:
+                        self.invalid(4)
                 else:
-                    return "result = " + self.arg2.value + "()"
+                    self.invalid(3)
             else:
                 self.invalid(2)
 
