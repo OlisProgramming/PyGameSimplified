@@ -29,13 +29,13 @@ begin
         run pygame's init
 		make list (640 480) called size
 
-		store pygame's display's set_mode(size) in hwnd
+		store pygame's display's set_mode(size) in my hwnd
 
-		set title to "PGS Test"
-		run pygame's display's set_caption(title)
+		set my title to "PGS Test"
+		run pygame's display's set_caption(my title)
 
-		make list (255 255 255) called background_color
-		make pygame's time's Clock called clock
+		make list (255 255 255) called my background_color
+		make pygame's time's Clock called my clock
 		set my running to true
 
 		while my running
@@ -54,9 +54,9 @@ begin
 				end
 			end
 
-			run hwnd's fill (background_color)
+			run my hwnd's fill (my background_color)
 			run pygame's display's flip
-			run clock's tick (60)
+			run my clock's tick (60)
 		end
     end
 end
