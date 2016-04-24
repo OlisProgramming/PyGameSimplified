@@ -20,9 +20,9 @@ Here are all of the valid tokens (not organised very well). Token names are as s
 ### Math/Maths (`MATH_*`)
 Symbol/Word | Token Name
 ----------- | ----------
-Any number (no sign, can be floating point) | `MATH_NUMBER`
-`+` | `MATH_PLUS`
-`-` | `MATH_MINUS`
+Any number (no sign, can be floating point), `Num`/`Number` in docs | `MATH_NUMBER`
+`+`, `Plus` in docs | `MATH_PLUS`
+`-`, `Minus` in docs | `MATH_MINUS`
 `eval` | `MATH_EVAL`
 
 ### Keywords (`KWD_*`)
@@ -70,9 +70,9 @@ Symbol/Word | Token Name
 ### Miscellaneous (`MISC_*`)
 Symbol/Word | Token Name
 ----------- | ----------
-When the end of the file has been reached | `MISC_EOF`
-Any string of alpha characters or single quote for `'s` statement | `MISC_STRING`
-Any string of characters surrounded by `"` on both sides (no single quotes, just double). Python escape characters (`\n`, `\t`, `\"`, `\\`, `\r`, `\uxxxx` etc.) are permitted. | `MISC_STRING_LITERAL`
+When the end of the file has been reached, `Eof` in docs | `MISC_EOF`
+Any string of alpha characters or single quote for `'s` statement, `Str`/`String` in docs | `MISC_STRING`
+Any string of characters surrounded by `"` on both sides (no single quotes, just double). Python escape characters (`\n`, `\t`, `\"`, `\\`, `\r`, `\uxxxx` etc.) are permitted. `StrLit` in docs. | `MISC_STRING_LITERAL`
 `begin` | `MISC_BEGIN`
 `end` | `MISC_END`
 `(` | `MISC_LPARENTH`
@@ -88,5 +88,14 @@ Certain sequences of characters do not make phrases (but are still valid), for e
     # symbol at the start of
     # every line.
 
-Here are the other phrases, translations and definitions.
-* ``
+Here are the other phrases, translations and definitions. When a phrase increases or decreases indent, the terms `(ind+)` and `(ind-)` are used, respectively. `arg1`, `arg2` etc refer to the values of the tokens, respectively. For example, the phrase `Function Str Begin` could be translated from `function draw begin` into `def draw():`. If a specific string is required for certain behaviour, it is listed in the Extra Usage column.
+
+Phrase | Translation into Python | Extra Usage
+------ | ----------------------- | -----------
+`Num Plus Num` | Result of addition | Optimisation code
+`Num Minus Num` | Result of subtraction | Optimisation code
+`Function Str Begin` | `def arg2(self):` | `(ind+)` Creates a function with no parameters. Only use inside classes.
+`Mainfunction Begin` | `if __name__ == '__main__':` | `(ind+)` Code that runs if this file is the main file being run. Only use outside classes.
+`Initfunction Begin` | `def __init__(self):` | `(ind+)` Code that runs when an instance of the containing class is created. Only use inside classes.
+`Endprogram` | `quit()` | Quits the program without unloading any data. Use with caution.
+`Import Str` | `from arg2 import *` | Imports code from local file. *Exception:* `arg2` is `pygame`; translates to `import pygame`.
