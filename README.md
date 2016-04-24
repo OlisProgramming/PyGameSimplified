@@ -17,23 +17,23 @@ See list below for all possible tokens, phrases and their Python translations.
 Here are all of the valid tokens:
 
 ### Math/Maths
-<table>
-    <tr><td>Any number, (no sign, can be floating-point)</td><td>`MATH_NUMBER`</td></tr>
-    <tr><td>`+`</td><td>`MATH_PLUS`</td></tr>
-    <tr><td>`-`</td><td>`MATH_MINUS`</td></tr>
-    <tr><td>`eval`</td><td>`MATH_EVAL`</td></tr>
-</table>
+Symbol/Word | Token Name
+----------- | ----------
+Any number (no sign, can be floating point) | `MATH_NUMBER`
+`+` | `MATH_PLUS`
+`-` | `MATH_MINUS`
+`eval` | `MATH_EVAL`
+
 
 ## Phrases
 Certain sequences of characters do not make phrases (but are still valid), for example, comments, e.g.:
-```
-\# This is a comment.
 
-\# This is a multi-line
-\# comment. You need a '\#'
-\# symbol at the start of
-\# every line.
-```
+    # This is a comment.
+    
+    # This is a multi-line
+    # comment. You need a '#'
+    # symbol at the start of
+    # every line.
 
 Here are the other phrases, translations and definitions.
 * ``
