@@ -1,5 +1,6 @@
 proj_name = ""
 
+
 def main():
     return """import Window  # Window.pgs
 
