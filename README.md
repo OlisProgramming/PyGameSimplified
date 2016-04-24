@@ -144,7 +144,17 @@ All of these are optional, but give clarity.
 * Line spaces: Each `begin` and `end` statement should have their own new line.
 * Furthermore, phrases should not share lines with other phrases, and they should not span more than one line, except in cases of very long lines (over 79 chars).
 * Comments: Place comments two or more spaces away from code. One space only should be allowed after the `#` symbol before commented documentation.
+* Use long continuous lines of `#`s (over 10) to separate parts of code.
+* To title certain parts of code, use 5 `#`s then the title name in all caps then 5 `#`s again, e.g.: `##### DRAW CALLS #####`
 * Between classes/functions: allow two line breaks between two classes, two functions or the beginning of a class. Documentation in comments counts as lines IN the class/function.
+* Inline Documentation: Documentation should be immediately one line before the item it is documenting, leaving one blank line before it to separate it from previous code. Classes should have class name on the first line of documentation, then an empty line (still with `#` symbol), then further documentation. Certain documentation items can be given using this set of annotations:
+	- `@author NAME` states who authored the file.
+	- `@date DD/MM/YY` is the date the file was CREATED, not last updated.
+	- `@param NAME` is a parameter or argument to a specific function (once this feature is added).
+	- `@return VAR_TYPE NAME` or `@return NAME` shows what this function returns, e.g. `@return StrLit greeting`. It is recommended to use `@return Str/String` as opposed to `@return StrLit` because Python does not support pointers to variables (so the `String` keyword would be unused)
+	- `@todo` is what the user indends to add in the future.
+	- `@see FILE_NAME/CLASS_NAME` recommends to the user to also look at said file/class for extra information.
+	- `@see CLASS_NAME's FUNCTION_NAME/VARIABLE_NAME` is as above but shows functions and variables instead.
 
 Examples of these rules in action:
 ```
@@ -153,20 +163,31 @@ import Window  # Window.pgs
 
 # Main class
 #
-# TODO documentation.
+# @author Oli's Programming
+# @date 24/04/16
+# Main class for sample PGS project.
 class Main
 begin
     initfunction
     begin
         write "Main init"
+        
+        # @see Main's write_hello
+        # This is where "hello_message" is used.
         set my hello_message to "hello"
     end
     
     
     # Writes "hello" to the screen.
+    #
+    # @return StrLit hello_message
+    # The message that was just written to the screen.
+    #
+    # @todo add the user's name, to write for example "hello, user!"
     function write_hello
     begin
         write hello_message  # and do something else
+        return hello_message
     end
 end
 ```
@@ -180,6 +201,9 @@ import Window  # Window.pgs
 
 # Main class
 #
+# @author Oli's Programming
+# @date 24/04/16
+#
 # Handles window instance and is run
 # as a single instance when
 # the program is started
@@ -192,8 +216,67 @@ begin
     end
 end
 
+
 mainfunction  # Runs at program start
 begin
     make Main called main  # Calls Main's initfunction automatically
+end
+```
+
+## `Window.pgs`
+```
+import pygame  # Module for windows and apps
+
+# Window class
+#
+# @author Oli's Programming
+# @date 24/04/16
+#
+# Handles draw calls and
+# PyGame events
+# Is owned by the Main class
+# @see Main
+class Window
+begin
+    initfunction
+    begin
+		write "Window init"
+        run pygame's init  # Initialise PyGame
+		make list (640 480) called size  # Set window size to 640x480
+
+		store pygame's display's set_mode(size) in my hwnd  # Store window in hwnd
+
+		set my title to """ + '"' + proj_name + '"' + """
+		run pygame's display's set_caption(my title)  # Set title to """ + '"' + proj_name + '"' + """
+
+		make list (255 255 255) called my background_color  # Set background colour to white
+		make pygame's time's Clock called my clock  # Make a clock to record FPS and time since last frame
+		set my running to true  # Game is still running
+
+		########################################
+
+		while my running  # Main Loop
+		begin
+			##### EVENTS #####
+			store pygame's event's get in eventlist
+			for event in eventlist  # Get all events since last frame
+			begin
+				switch event's type
+				case pygame's QUIT  # User pressed 'X' button
+				begin
+					set my running to false
+				end
+				case pygame's KEYDOWN  # User pressed a key down
+				begin
+					write "Key Down!"
+				end
+			end
+
+			##### DRAWING #####
+			run my hwnd's fill (my background_color)  # Fill background with 'my background_color'
+			run pygame's display's flip  # Flip sprites drawn onto screen
+			run my clock's tick (60)  # Delay so that frames never exceed 60FPS
+		end
+    end
 end
 ```
