@@ -20,6 +20,19 @@ MeyerWeb Reset
     font-style: normal;
 
 }
+@font-face {
+    font-family: 'mplus1';
+    src: url('../mplus-1m-regular-webfont.eot');
+    src: url('../mplus-1m-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../mplus-1m-regular-webfont.woff') format('woff'),
+         url('../mplus-1m-regular-webfont.ttf') format('truetype'),
+         url('../mplus-1m-regular-webfont.svg#m_1mregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -174,7 +187,7 @@ pre, code {
   color: #222;
   background-color: #fff;
 
-  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-family: mplus1, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-size: 14px;
 
   border-radius: 2px;
