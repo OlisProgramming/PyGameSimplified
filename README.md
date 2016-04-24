@@ -130,3 +130,70 @@ Phrase | Translation into Python | Usage
 `Case Str Begin` | `if/elif switch_arg == arg2:` | `(ind+)` Switch Case statement on `arg2`.
 `Case Default Begin` | `else:` | `(ind+)` Switch Case default statement.
 `End` | Returns nothing | `(ind-)` Signals end of indented block.
+
+# Naming and Spacing Conventions
+All of these are optional, but give clarity.
+## Naming
+* Class names and file names: `UpperCamelCase`
+* Function names and variables: `lower_underscore`
+* Constants: `UPPER_UNDERSCORE`
+
+## Spacing
+* Indentation: Indent four spaces after a `begin` statement.
+* Outdentation: Outdent four spaces just before an `end` statement.
+* Line spaces: Each `begin` and `end` statement should have their own new line.
+* Furthermore, phrases should not share lines with other phrases, and they should not span more than one line, except in cases of very long lines (over 79 chars).
+* Comments: Place comments two or more spaces away from code. One space only should be allowed after the `#` symbol before commented documentation.
+* Between classes/functions: allow two line breaks between two classes, two functions or the beginning of a class. Documentation in comments counts as lines IN the class/function.
+
+Examples of these rules in action:
+```
+import Window  # Window.pgs
+
+
+# Main class
+#
+# TODO documentation.
+class Main
+begin
+    initfunction
+    begin
+        write "Main init"
+        set my hello_message to "hello"
+    end
+    
+    
+    # Writes "hello" to the screen.
+    function write_hello
+    begin
+        write hello_message  # and do something else
+    end
+end
+```
+
+# Example Code
+Here are some example code files, showing usage of code, phrases and stylistic conventions.
+
+## `Main.pgs`
+```
+import Window  # Window.pgs
+
+# Main class
+#
+# Handles window instance and is run
+# as a single instance when
+# the program is started
+class Main
+begin
+    initfunction
+    begin
+        write "Main init"
+		make Window called window  # Calls Window's initfunction automatically
+    end
+end
+
+mainfunction  # Runs at program start
+begin
+    make Main called main  # Calls Main's initfunction automatically
+end
+```
