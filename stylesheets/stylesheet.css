@@ -67,6 +67,7 @@ ol, ul {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+  bgcolor: f9f9f9;
 }
 
 /*******************************************************************************
@@ -274,7 +275,6 @@ th {
 td {
   padding: 10px;
   border: 1px solid #373737;
-  background: #fafafa;
  }
 
 form {
