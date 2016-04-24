@@ -103,6 +103,22 @@ class Interpreter(object):
                     return Token(KWD_IMPORT, word)
                 elif word == "return":
                     return Token(KWD_RETURN, word)
+                elif word == "if":
+                    return Token(KWD_IF, word)
+                elif word == "elif":
+                    return Token(KWD_ELIF, word)
+                elif word == "else":
+                    return Token(KWD_ELSE, word)
+                elif word == "while":
+                    return Token(KWD_WHILE, word)
+                elif word == "for":
+                    return Token(KWD_FOR, word)
+                elif word == "in":
+                    return Token(KWD_IN, word)
+                elif word == "equals":
+                    return Token(KWD_EQUAL, word)
+                elif word == "store":
+                    return Token(KWD_STORE, word)
 
                 elif word == "class":
                     return Token(CLA_CLASS, word)
@@ -248,6 +264,75 @@ class Interpreter(object):
             else:
                 self.invalid(2)
 
+        elif self.eat(KWD_IF):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    return "if " + self.arg2.value + ":"  # If Str Begin
+                elif self.eat(KWD_EQUAL):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        self.arg5 = self.current_token
+                        if self.eat(MISC_BEGIN):
+                            self.indent += 1
+                            return "if " + self.arg2.value + " == " + self.arg4.value + ":"  # If Str Equal Str Begin
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_ELIF):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    return "elif " + self.arg2.value + ":"  # Elif Str Begin
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_ELSE):
+            self.arg2 = self.current_token
+            if self.eat(MISC_BEGIN):
+                self.indent += 1
+                return "else:"  # Else Str Begin
+
+        elif self.eat(KWD_WHILE):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    return "while " + self.arg2.value + ":"  # While Str Begin
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_FOR):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(KWD_IN):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        self.arg5 = self.current_token
+                        if self.eat(MISC_BEGIN):
+                            self.indent += 1
+                            return "for " + self.arg2.value + " in " + self.arg4.value + ":"  # For Str In Str Begin
+                        else:
+                            self.invalid(5)
+                    else:
+                        self.invalid(4)
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
         elif self.eat(CLA_CLASS):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
@@ -363,7 +448,26 @@ class Interpreter(object):
                 self.arg3 = self.current_token
                 if self.eat(MISC_LPARENTH):
                     self.arg4 = self.current_token
-                    self.arg4.value += ", "
+                    self.arg4.value = str(self.arg4.value) + ", "
+                    while self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or self.eat(VAR_FALSE):
+                        self.arg4.value += str(self.current_token.value) + ", "
+                    self.arg5 = self.current_token
+                    if self.eat(MISC_RPARENTH):
+                        return self.arg2.value + "(" + self.arg4.value[:-5] + ")"
+                    else:
+                        self.invalid(5)
+                else:
+                    return self.arg2.value + "()"
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_STORE):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_LPARENTH):
+                    self.arg4 = self.current_token
+                    self.arg4.value = str(self.arg4.value) + ", "
                     while self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or self.eat(VAR_FALSE):
                         self.arg4.value += str(self.current_token.value) + ", "
                     self.arg5 = self.current_token
