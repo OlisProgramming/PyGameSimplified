@@ -72,6 +72,15 @@ class Interpreter(object):
         self.advance()
         return result
 
+    def line(self):
+        """Return the next line of input."""
+        result = ''
+        while self.current_char is not None and not self.current_char == '\n':
+            result += self.current_char
+            self.advance()
+        self.advance()
+        return result
+
     def get_next_token(self):
         """
         Tokenizer
@@ -224,6 +233,10 @@ class Interpreter(object):
                 self.advance()
                 self.next_token_prefix = ""
                 return Token(MISC_STRING_LITERAL, self.string_literal())
+
+            elif self.current_char == "#":
+                self.line()
+                continue
 
             Interpreter.error("Invalid token (Valid types are e.g. NUMBER, PLUS, MINUS etc.): got " + self.current_char)
 
