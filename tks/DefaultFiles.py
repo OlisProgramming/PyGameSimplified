@@ -36,16 +36,21 @@ begin
 
 		make list (255 255 255) called background_color
 		make pygame's time's Clock called clock
-		set running to true
+		set my running to true
 
-		while running
+		while my running
 		begin
 			store pygame's event's get in eventlist
 			for event in eventlist
 			begin
-				if event's type equals pygame's QUIT
+				switch event's type
+				case pygame's QUIT
 				begin
-					set running to false
+					set my running to false
+				end
+				case pygame's KEYDOWN
+				begin
+					write "Key Down!"
 				end
 			end
 

@@ -16,6 +16,8 @@ class Interpreter(object):
         self.eof = False
         self.current_token = self.get_next_token()
         self.next_token_prefix = ""
+        self.switch_arg = ""
+        self.switch_cases = 0
 
     @staticmethod
     def error(string):
@@ -71,7 +73,8 @@ class Interpreter(object):
         return result
 
     def get_next_token(self):
-        """Lexical analyzer (also known as scanner or tokenizer)
+        """
+        Tokenizer
 
         This method is responsible for breaking a sentence
         apart into tokens.
@@ -83,98 +86,143 @@ class Interpreter(object):
                 continue
 
             if self.current_char.isdigit():
+                self.next_token_prefix = ""
                 return Token(MATH_NUMBER, self.number())
 
             if self.current_char.isalpha():
                 word = self.string()
 
                 if word == "eval":
+                    self.next_token_prefix = ""
                     return Token(MATH_EVAL, word)
 
                 elif word == "endprogram":
+                    self.next_token_prefix = ""
                     return Token(KWD_ENDPROGRAM, word)
                 elif word == "function":
+                    self.next_token_prefix = ""
                     return Token(KWD_FUNCTION, word)
                 elif word == "initfunction":
+                    self.next_token_prefix = ""
                     return Token(KWD_INITFUNCTION, word)
                 elif word == "mainfunction":
+                    self.next_token_prefix = ""
                     return Token(KWD_MAINFUNCTION, word)
                 elif word == "import":
+                    self.next_token_prefix = ""
                     return Token(KWD_IMPORT, word)
                 elif word == "return":
+                    self.next_token_prefix = ""
                     return Token(KWD_RETURN, word)
                 elif word == "if":
+                    self.next_token_prefix = ""
                     return Token(KWD_IF, word)
                 elif word == "elif":
+                    self.next_token_prefix = ""
                     return Token(KWD_ELIF, word)
                 elif word == "else":
+                    self.next_token_prefix = ""
                     return Token(KWD_ELSE, word)
                 elif word == "while":
+                    self.next_token_prefix = ""
                     return Token(KWD_WHILE, word)
                 elif word == "for":
+                    self.next_token_prefix = ""
                     return Token(KWD_FOR, word)
                 elif word == "in":
+                    self.next_token_prefix = ""
                     return Token(KWD_IN, word)
                 elif word == "equals":
+                    self.next_token_prefix = ""
                     return Token(KWD_EQUAL, word)
                 elif word == "store":
+                    self.next_token_prefix = ""
                     return Token(KWD_STORE, word)
+                elif word == "switch":
+                    self.next_token_prefix = ""
+                    return Token(KWD_SWITCH, word)
+                elif word == "case":
+                    self.next_token_prefix = ""
+                    return Token(KWD_CASE, word)
+                elif word == "default":
+                    self.next_token_prefix = ""
+                    return Token(KWD_DEFAULT, word)
 
                 elif word == "class":
+                    self.next_token_prefix = ""
                     return Token(CLA_CLASS, word)
 
                 elif word == "set":
+                    self.next_token_prefix = ""
                     return Token(VAR_SET, word)
                 elif word == "to":
+                    self.next_token_prefix = ""
                     return Token(VAR_TO, word)
                 elif word == "make":
+                    self.next_token_prefix = ""
                     return Token(VAR_MAKE, word)
                 elif word == "called":
+                    self.next_token_prefix = ""
                     return Token(VAR_CALLED, word)
                 elif word == "true":
+                    self.next_token_prefix = ""
                     return Token(VAR_TRUE, word)
                 elif word == "false":
+                    self.next_token_prefix = ""
                     return Token(VAR_FALSE, word)
                 elif word == "list":
+                    self.next_token_prefix = ""
                     return Token(VAR_LIST, word)
 
                 elif word == "write":
+                    self.next_token_prefix = ""
                     return Token(FUN_WRITE, word)
                 elif word == "run":
+                    self.next_token_prefix = ""
                     return Token(FUN_RUN, word)
 
                 elif word == "begin":
+                    self.next_token_prefix = ""
                     return Token(MISC_BEGIN, word)
                 elif word == "end":
+                    self.next_token_prefix = ""
                     return Token(MISC_END, word)
                 elif word == "my":
                     self.next_token_prefix = "self."
                     continue
                 else:
+                    prefix = self.next_token_prefix
                     if word[-2:] == "'s":
+                        self.next_token_prefix = ""
                         next_token = self.get_next_token()
-                        return Token(MISC_STRING, self.next_token_prefix + word[:-2] + "." + next_token.value)
+                        return Token(MISC_STRING, prefix + word[:-2] + "." + next_token.value)
                     else:
-                        return Token(MISC_STRING, self.next_token_prefix + word)  # Class / Variable name
+                        self.next_token_prefix = ""
+                        return Token(MISC_STRING, prefix + word)  # Class / Variable name
 
             if self.current_char == '+':
                 self.advance()
+                self.next_token_prefix = ""
                 return Token(MATH_PLUS, '+')
 
             elif self.current_char == '-':
                 self.advance()
+                self.next_token_prefix = ""
                 return Token(MATH_MINUS, '-')
 
             elif self.current_char == '(':
                 self.advance()
+                self.next_token_prefix = ""
                 return Token(MISC_LPARENTH, '(')
 
             elif self.current_char == ')':
                 self.advance()
+                self.next_token_prefix = ""
                 return Token(MISC_RPARENTH, ')')
 
             elif self.current_char == '"':
                 self.advance()
+                self.next_token_prefix = ""
                 return Token(MISC_STRING_LITERAL, self.string_literal())
 
             Interpreter.error("Invalid token (Valid types are e.g. NUMBER, PLUS, MINUS etc.): got " + self.current_char)
@@ -189,7 +237,6 @@ class Interpreter(object):
         # otherwise return false.
         if self.current_token.type == token_type:
             self.current_token = self.get_next_token()
-            self.next_token_prefix = ""
             return True
         return False
 
@@ -494,6 +541,37 @@ class Interpreter(object):
             else:
                 self.invalid(2)
 
+        elif self.eat(KWD_SWITCH):  # SWITCH statements CANNOT be nested... yet?
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.switch_arg = self.arg2.value  # Switch Str Begin
+                self.switch_cases = 0
+                return ''
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_CASE):
+            self.arg2 = self.current_token
+            if self.eat(MISC_STRING):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    self.switch_cases += 1
+                    return ("elif " if self.switch_cases > 1 else "if ") + \
+                            self.switch_arg + " == " + self.arg2.value + ":"
+                else:
+                    self.invalid(3)
+            elif self.eat(KWD_DEFAULT):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    self.switch_cases += 1
+                    return "else:"
+                else:
+                    self.invalid(3)
+            else:
+                self.invalid(2)
+
         elif self.eat(MISC_END):
             self.indent -= 1
             return ''  # End
@@ -544,8 +622,8 @@ class Interpreter(object):
 
 
 def main():
-    projfile = open(".pgsproject")
-    files = projfile.read().splitlines()
+    project_file = open(".pgsproject")
+    files = project_file.read().splitlines()
     for file_name in files:
         try:
             file = open(file_name + '.pgs')
