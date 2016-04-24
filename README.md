@@ -40,6 +40,7 @@ Symbol/Word | Token Name
 `while` | `KWD_WHILE`
 `for` | `KWD_FOR`
 `in` | `KWD_IN`
+`equal` | `KWD_EQUAL`
 `store` | `KWD_STORE`
 `switch` | `KWD_SWITCH`
 `case` | `KWD_CASE`
@@ -88,14 +89,32 @@ Certain sequences of characters do not make phrases (but are still valid), for e
     # symbol at the start of
     # every line.
 
-Here are the other phrases, translations and definitions. When a phrase increases or decreases indent, the terms `(ind+)` and `(ind-)` are used, respectively. `arg1`, `arg2` etc refer to the values of the tokens, respectively. For example, the phrase `Function Str Begin` could be translated from `function draw begin` into `def draw():`. If a specific string is required for certain behaviour, it is listed in the Extra Usage column.
+Here are the other phrases, translations and definitions. When a phrase increases or decreases the resulting indent in Python, the terms `(ind+)` and `(ind-)` are used, respectively. `arg1`, `arg2` etc refer to the values of the tokens, respectively. For example, the phrase `Function Str Begin` could be translated from `function draw begin` into `def draw():`. If a specific string is required for certain behaviour, it is listed in the Usage column.
 
-Phrase | Translation into Python | Extra Usage
+Phrase | Translation into Python | Usage
 ------ | ----------------------- | -----------
-`Num Plus Num` | Result of addition | Optimisation code
-`Num Minus Num` | Result of subtraction | Optimisation code
+`Num Plus Num` | Result of addition | Optimisation code.
+`Num Minus Num` | Result of subtraction | Optimisation code.
 `Function Str Begin` | `def arg2(self):` | `(ind+)` Creates a function with no parameters. Only use inside classes.
 `Mainfunction Begin` | `if __name__ == '__main__':` | `(ind+)` Code that runs if this file is the main file being run. Only use outside classes.
 `Initfunction Begin` | `def __init__(self):` | `(ind+)` Code that runs when an instance of the containing class is created. Only use inside classes.
 `Endprogram` | `quit()` | Quits the program without unloading any data. Use with caution.
 `Import Str` | `from arg2 import *` | Imports code from local file. *Exception:* `arg2` is `pygame`; translates to `import pygame`.
+`Return Str/Num/True/False` | `return arg2` | Returns value from function. *Exception:* `arg2` is a `StrLit`; translates to `return "arg2"`
+`If Str Begin` | `if arg2:` | `(ind+)` If clause on a (boolean) variable.
+`If Str Equal Str Begin` | `if arg2 == arg4:` | `(ind+)` If clause on whether two variables are equal.
+`Elif Str Begin` | `elif arg2:` | `(ind+)` Elif clause on a (boolean) variable.
+`Elif Str Equal Str Begin` | `elif arg2 == arg4:` | `(ind+)` Elif clause on whether two variables are equal.
+`Else Begin` | `else:` | `(ind+)` Else clause.
+`While Str Begin` | `while arg2:` | `(ind+)` While a (boolean) variable is `true`, execute block of code.
+`For Str In Str Begin` | `for arg2 in arg4:` | `(ind+)` Iterate over all values in (list/tuple) `arg4`, setting `arg2` to the value each iteration.
+`Class Str Begin` | `class arg2:` | `(ind+)` Create a new class named `arg2`, not inheriting any other class.
+`Set Str To Str` | `arg2 = arg4` | Set value of `arg2` to value of `arg4`.
+`Set Str To StrLit` | `arg2 = "arg4"` | Set value of `arg2` to value of `arg4`.
+`Set Str To Num` | `arg2 = arg4` | Set value of `arg2` to value of `arg4`.
+`Set Str To True` | `arg2 = true` | Set value of `arg2` to `true`.
+`Set Str To False` | `arg2 = false` | Set value of `arg2` to `false`.
+`Set Str To Eval Str/Num Plus Str/Num` | `arg2 = arg5 + arg7` | Set value of `arg2` to value of `arg5` plus value of `arg7`.
+`Set Str To Eval Str/Num Minus Str/Num` | `arg2 = arg5 - arg7` | Set value of `arg2` to value of `arg5` minus value of `arg7`.
+`Make Str Called Str` | `arg4 = arg2()` | Set value of `arg4` to a default-constructed `arg2`.
+`Make List ( ... ) Called Str` | `arg7 = (arg4)` | Set value of `arg7` to a list of all of the values between `(` and `)`, separated by whitespace.
