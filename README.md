@@ -118,3 +118,15 @@ Phrase | Translation into Python | Usage
 `Set Str To Eval Str/Num Minus Str/Num` | `arg2 = arg5 - arg7` | Set value of `arg2` to value of `arg5` minus value of `arg7`.
 `Make Str Called Str` | `arg4 = arg2()` | Set value of `arg4` to a default-constructed `arg2`.
 `Make List ( ... ) Called Str` | `arg7 = (arg4)` | Set value of `arg7` to a list of all of the values between `(` and `)`, separated by whitespace.
+`Write Str/Num` | `print(arg2)` | Print value of `arg2` to the screen.
+`Write StrLit` | `print("arg2")` | Print value of `arg2` to the screen.
+`Write True` | `print("true")` | Print `"true"` to the screen.
+`Write False` | `print("false")` | Print `"false"` to the screen.
+`Run Str` | `arg2()` | Runs function `arg2`.
+`Run Str ( ... )` | `arg2(arg4)` | Run function `arg2` with arguments of a list of all of the values between `(` and `)`, separated by whitespace.
+`Store Str In Str` | `arg2()` | Run function `arg2`, and store result in `arg4`.
+`Store Str ( ... ) In Str` | `arg2(arg4)` | Run function `arg2` with arguments of a list of all of the values between `(` and `)`, separated by whitespace, and store result in `arg7`.
+`Switch Str` | Returns nothing | Initialise switch statement made of `if/elif/else` blocks. Store arg2 in `switch_arg`. *Note:* `switch` statements cannot yet be nested
+`Case Str Begin` | `if/elif switch_arg == arg2:` | `(ind+)` Switch Case statement on `arg2`.
+`Case Default Begin` | `else:` | `(ind+)` Switch Case default statement.
+`End` | Returns nothing | `(ind-)` Signals end of indented block.
