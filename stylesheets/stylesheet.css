@@ -21,7 +21,7 @@ MeyerWeb Reset
 
 }
 @font-face {
-    font-family: 'mplus1';
+    font-family: 'mplus';
     src: url('../mplus-1m-regular-webfont.eot');
     src: url('../mplus-1m-regular-webfont.eot?#iefix') format('embedded-opentype'),
          url('../mplus-1m-regular-webfont.woff') format('woff'),
@@ -187,7 +187,7 @@ pre, code {
   color: #222;
   background-color: #fff;
 
-  font-family: mplus1, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-family: mplus, Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
   font-size: 14px;
 
   border-radius: 2px;
