@@ -1,4 +1,7 @@
-# PyGameSimplified
+# PyGame Simplified
+**This README file is out of date. See [the website](http://olisprogramming.github.com/PyGameSimpified) instead for information!**
+
+
 A simple, user-friendly programming language that hopes to make game development easier and faster!
 This project is a PyCharm Community Edition 5.0.4 Project.
 PGS translates `*.pgs` files into `*.py` (Python 3.5) files that `import pygame`.
