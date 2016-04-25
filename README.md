@@ -1,5 +1,5 @@
 # PyGame Simplified
-**This README file is out of date. See [the website](http://olisprogramming.github.com/PyGameSimpified) instead for information!**
+**This README file is out of date. See [the website](http://olisprogramming.github.io/PyGameSimpified) instead for information!**
 
 
 A simple, user-friendly programming language that hopes to make game development easier and faster!
