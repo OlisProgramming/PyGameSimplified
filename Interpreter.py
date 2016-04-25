@@ -156,6 +156,9 @@ class Interpreter(object):
                 elif word == "default":
                     self.next_token_prefix = ""
                     return Token(KWD_DEFAULT, word)
+                elif word == "inherits":
+                    self.next_token_prefix = ""
+                    return Token(KWD_DEFAULT, word)
 
                 elif word == "class":
                     self.next_token_prefix = ""
@@ -350,6 +353,13 @@ class Interpreter(object):
                 if self.eat(MISC_BEGIN):
                     self.indent += 1
                     return "elif " + self.arg2.value + ":"  # Elif Str Begin
+                elif self.eat(KWD_EQUAL):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        self.arg5 = self.current_token
+                        if self.eat(MISC_BEGIN):
+                            self.indent += 1
+                            return "elif " + self.arg2.value + " == " + self.arg4.value + ":"  # Elif Str Equal Str Begin
                 else:
                     self.invalid(3)
             else:
@@ -400,6 +410,18 @@ class Interpreter(object):
                 if self.eat(MISC_BEGIN):
                     self.indent += 1
                     return "class " + self.arg2.value + ":"  # Class Str Begin
+                elif self.eat(KWD_INHERITS):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_STRING):
+                        self.arg5 = self.current_token
+                        if self.eat(MISC_BEGIN):
+                            self.indent += 1
+                            return "class " + self.arg2.value + "(" + self.arg4.value + "):"
+                            # Class Str Inherits Str Begin
+                        else:
+                            self.invalid(5)
+                    else:
+                        self.invalid(4)
                 else:
                     self.invalid(3)
             else:
@@ -557,7 +579,7 @@ class Interpreter(object):
         elif self.eat(KWD_SWITCH):  # SWITCH statements CANNOT be nested... yet?
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
-                self.switch_arg = self.arg2.value  # Switch Str Begin
+                self.switch_arg = self.arg2.value  # Switch Str
                 self.switch_cases = 0
                 return ''
             else:

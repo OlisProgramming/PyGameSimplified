@@ -6,6 +6,9 @@ def main():
 
 # Main class
 #
+# @author Oli's Programming
+# @date 24/04/16
+#
 # Handles window instance and is run
 # as a single instance when
 # the program is started
@@ -33,9 +36,13 @@ def window():
 
 # Window class
 #
+# @author Oli's Programming
+# @date 24/04/16
+#
 # Handles draw calls and
 # PyGame events
 # Is owned by the Main class
+# @see Main
 class Window
 begin
     initfunction
@@ -46,8 +53,8 @@ begin
 
 		store pygame's display's set_mode(size) in my hwnd  # Store window in hwnd
 
-		set my title to """ + '"' + proj_name + '"' + """
-		run pygame's display's set_caption(my title)  # Set title to """ + '"' + proj_name + '"' + """
+		set my title to "TestProj"
+		run pygame's display's set_caption(my title)  # Set title to "TestProj"
 
 		make list (255 255 255) called my background_color  # Set background colour to white
 		make pygame's time's Clock called my clock  # Make a clock to record FPS and time since last frame
