@@ -41,9 +41,25 @@
   <li><a href="pygame.html"><code>pygame</code></a></li>
 </ul>
 
+<h2>Variables</h2>
+<h3>window</h3>
+<p>PyGame window instance that manages sprites drawn on the screen, etc.</p>
+
+<h3>title</h3>
+<p>Variable that holds the initial title of the game. Changing this doesn't affect the screen; use <code>pygame's display's set_title("name")</code> for this.</p>
+
+<h3>background_color</h3>
+<p>List of three integers holding RGB values of the screen's background colour.</p>
+
+<h3>clock</h3>
+<p>Instance of <code>pygame's time's Clock</code>. Used to limit FPS to 60.</p>
+
+<h3>running</h3>
+<p>True or false value that, when set to false, quits the game.</p>
+
 <h2>Functions</h2>
 <h3>initfunction</h3>
-<p>Initialises <code>pygame</code> with a screen size of 640x480. Sets the window title to the project's name, but this cannot be changed at runtime. Sets up a background colour fill of white, but this variable can be changed at runtime. Sets up a <code>pygame Clock</code> to limit FPS to 60.</p>
+<p>Initialises <code>pygame</code> with a screen size of 640x480. Sets the window title to the project's name, but this cannot be changed at runtime (you must use <code>pygame's display's set_title("name")</code> instead). Sets up a background colour fill of white; this variable can be changed at runtime. Sets up a <code>pygame Clock</code> to limit FPS to 60.</p>
 
 <h3>display_screen</h3>
 <p>Called manually once everything has been set up ready for the screen to be launched. Normally this can just be called at the end of the <code>initfunction</code> of a class inheriting this one (usually called the project name, with <code>Window</code> appended).</p>
