@@ -158,7 +158,10 @@ class Interpreter(object):
                     return Token(KWD_DEFAULT, word)
                 elif word == "inherits":
                     self.next_token_prefix = ""
-                    return Token(KWD_DEFAULT, word)
+                    return Token(KWD_INHERITS, word)
+                elif word == "override":
+                    self.next_token_prefix = ""
+                    return Token(KWD_OVERRIDE, word)
 
                 elif word == "class":
                     self.next_token_prefix = ""
@@ -205,9 +208,14 @@ class Interpreter(object):
                 else:
                     prefix = self.next_token_prefix
                     if word[-2:] == "'s":
-                        self.next_token_prefix = ""
-                        next_token = self.get_next_token()
-                        return Token(MISC_STRING, prefix + word[:-2] + "." + next_token.value)
+                        if word == "super's":
+                            self.next_token_prefix = ""
+                            next_token = self.get_next_token()
+                            return Token(MISC_STRING, prefix + "super()." + next_token.value)
+                        else:
+                            self.next_token_prefix = ""
+                            next_token = self.get_next_token()
+                            return Token(MISC_STRING, prefix + word[:-2] + "." + next_token.value)
                     else:
                         self.next_token_prefix = ""
                         return Token(MISC_STRING, prefix + word)  # Class / Variable name
@@ -216,11 +224,18 @@ class Interpreter(object):
                 self.advance()
                 self.next_token_prefix = ""
                 return Token(MATH_PLUS, '+')
-
             elif self.current_char == '-':
                 self.advance()
                 self.next_token_prefix = ""
                 return Token(MATH_MINUS, '-')
+            elif self.current_char == '*':
+                self.advance()
+                self.next_token_prefix = ""
+                return Token(MATH_MULTIPLY, '+')
+            elif self.current_char == '/':
+                self.advance()
+                self.next_token_prefix = ""
+                return Token(KWD_DIVIDE, '-')
 
             elif self.current_char == '(':
                 self.advance()
@@ -258,34 +273,71 @@ class Interpreter(object):
 
     def expr(self):
         self.arg1 = self.current_token
-        if self.eat(MATH_NUMBER):
-            self.arg2 = self.current_token
-            if self.eat(MATH_PLUS):
-                self.arg3 = self.current_token
-                if self.eat(MATH_NUMBER):  # Num + Num
-                    return str(self.arg1.value + self.arg3.value)
-                else:
-                    self.invalid(3)  # Num + ...
-
-            elif self.eat(MATH_MINUS):
-                self.arg3 = self.current_token
-                if self.eat(MATH_NUMBER):  # Num - Num
-                    return str(self.arg1.value - self.arg3.value)
-                else:
-                    self.invalid(3)  # Num - ...
-
-            else:
-                self.invalid(2)  # Num ...
-
-        elif self.eat(KWD_FUNCTION):
+        if self.eat(KWD_FUNCTION):
             self.arg2 = self.current_token
             if self.eat(MISC_STRING):
                 self.arg3 = self.current_token
                 if self.eat(MISC_BEGIN):
                     self.indent += 1
                     return "def " + self.arg2.value + "(self):"  # Function Str Begin
+                elif self.eat(MISC_LPARENTH):
+                    self.arg4 = self.current_token
+                    self.arg4.value = str(self.arg4.value) + ", "
+                    while self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or self.eat(VAR_FALSE):
+                        self.arg4.value += str(self.current_token.value) + ", "
+                    self.arg5 = self.current_token
+                    if self.eat(MISC_RPARENTH):
+                        self.arg6 = self.current_token
+                        if self.eat(MISC_BEGIN):
+                            self.indent += 1
+                            return "def " + self.arg2.value + "(self, " + self.arg4.value[:-5] + "):"
+                        else:
+                            self.invalid(6)
+                    else:
+                        self.invalid(5)
                 else:
                     self.invalid(3)
+            else:
+                self.invalid(2)
+
+        elif self.eat(KWD_OVERRIDE):
+            self.arg2 = self.current_token
+            if self.eat(KWD_FUNCTION):
+                self.arg3 = self.current_token
+                if self.eat(MISC_STRING):
+                    self.arg4 = self.current_token
+                    if self.eat(MISC_BEGIN):
+                        self.indent += 1
+                        return "def " + self.arg3.value + "(self):\n" + self.indent*'    ' + \
+                               "super()." + self.arg3.value + "()"  # Override Function Str Begin
+                    elif self.eat(MISC_LPARENTH):
+                        self.arg5 = self.current_token
+                        self.arg5.value = str(self.arg5.value) + ", "
+                        while self.eat(MISC_STRING) or self.eat(MATH_NUMBER) or self.eat(VAR_TRUE) or \
+                              self.eat(VAR_FALSE):
+                            self.arg5.value += str(self.current_token.value) + ", "
+                        self.arg6 = self.current_token
+                        if self.eat(MISC_RPARENTH):
+                            self.arg7 = self.current_token
+                            if self.eat(MISC_BEGIN):
+                                self.indent += 1
+                                return "def " + self.arg3.value + "(self, " + self.arg5.value[:-5] + "):\n" + \
+                                       self.indent*'    ' + "super()." + self.arg3.value + "(" + \
+                                       self.arg5.value[:-5] + ")"
+                                # Override Function Str ( ... ) Begin
+                            else:
+                                self.invalid(7)
+                        else:
+                            self.invalid(6)
+                    else:
+                        self.invalid(4)
+                else:
+                    self.invalid(3)
+            elif self.eat(KWD_INITFUNCTION):
+                self.arg3 = self.current_token
+                if self.eat(MISC_BEGIN):
+                    self.indent += 1
+                    return "def __init__(self):\n" + self.indent*'    ' + "super().__init__()"
             else:
                 self.invalid(2)
 
@@ -460,6 +512,20 @@ class Interpreter(object):
                                 if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
                                     return self.arg2.value + " = " + self.arg5.value + " - " + self.arg7.value
                                     # Set Str To Eval Num/Var Minus Num/Var
+                                else:
+                                    self.invalid(7)
+                            elif self.eat(MATH_MULTIPLY):
+                                self.arg7 = self.current_token
+                                if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
+                                    return self.arg2.value + " = " + self.arg5.value + " * " + self.arg7.value
+                                    # Set Str To Eval Num/Var Multiply Num/Var
+                                else:
+                                    self.invalid(7)
+                            elif self.eat(KWD_DIVIDE):
+                                self.arg7 = self.current_token
+                                if self.eat(MATH_NUMBER) or self.eat(MISC_STRING):
+                                    return self.arg2.value + " = " + self.arg5.value + " / " + self.arg7.value
+                                    # Set Str To Eval Num/Var Divide Num/Var
                                 else:
                                     self.invalid(7)
                             else:

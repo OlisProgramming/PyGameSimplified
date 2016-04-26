@@ -2,7 +2,7 @@ proj_name = ""
 
 
 def main():
-    return """import Window  # Window.pgs
+    return """import """ + proj_name + """Window
 
 # Main class
 #
@@ -32,59 +32,53 @@ end
 
 
 def window():
-    return """import pygame  # Module for windows and apps
+    return """import pygame
 
-# Window class
+
+class Window:
+    def __init__(self):
+        print("Window init")
+        pygame.init()
+        size = (640, 480)
+        self.hwnd = pygame.display.set_mode(size)
+        self.title = """ + '"' + proj_name + '"' """
+        pygame.display.set_caption(self.title)
+        self.background_color = (255, 255, 255)
+
+        self.clock = pygame.time.Clock()
+        self.running = True
+
+        while self.running:
+            event_list = pygame.event.get()
+            for event in event_list:
+
+                if event.type == pygame.QUIT:
+                    self.running = False
+
+                elif event.type == pygame.KEYDOWN:
+                    print("Key Down!")
+
+            self.hwnd.fill(self.background_color)
+            pygame.display.flip()
+            self.clock.tick(60)
+"""
+
+#############################
+
+
+def project_window():
+    return """import Window
+
+# Window Class
 #
 # @author Oli's Programming
-# @date 24/04/16
+# @date 25/04/16
 #
-# Handles draw calls and
+# Handles all draw calls and
 # PyGame events
-# Is owned by the Main class
-# @see Main
-class Window
+class """ + proj_name + """Window inherits Window
 begin
-    initfunction
-    begin
-		write "Window init"
-        run pygame's init  # Initialise PyGame
-		make list (640 480) called size  # Set window size to 640x480
 
-		store pygame's display's set_mode(size) in my hwnd  # Store window in hwnd
-
-		set my title to "TestProj"
-		run pygame's display's set_caption(my title)  # Set title to "TestProj"
-
-		make list (255 255 255) called my background_color  # Set background colour to white
-		make pygame's time's Clock called my clock  # Make a clock to record FPS and time since last frame
-		set my running to true  # Game is still running
-
-		########################################
-
-		while my running  # Main Loop
-		begin
-			##### EVENTS #####
-			store pygame's event's get in eventlist
-			for event in eventlist  # Get all events since last frame
-			begin
-				switch event's type
-				case pygame's QUIT  # User pressed 'X' button
-				begin
-					set my running to false
-				end
-				case pygame's KEYDOWN  # User pressed a key down
-				begin
-					write "Key Down!"
-				end
-			end
-
-			##### DRAWING #####
-			run my hwnd's fill (my background_color)  # Fill background with 'my background_color'
-			run pygame's display's flip  # Flip sprites drawn onto screen
-			run my clock's tick (60)  # Delay so that frames never exceed 60FPS
-		end
-    end
 end
 """
 
@@ -93,5 +87,5 @@ end
 
 
 def pgsproject():
-    return """Main
-Window"""
+    return "Main\n" + \
+           proj_name + "Window"

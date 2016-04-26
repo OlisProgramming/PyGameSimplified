@@ -34,8 +34,11 @@ Please type the project name to confirm (no spaces or non-alpha characters), or 
     else:
         print('\n\n' + '-'*20 + " INITIALISING PGS " + '-'*20)
         print("Initialising project...")
+        proj_name = ''.join(x for x in proj_name.title() if not x.isspace())
         DefaultFiles.proj_name = proj_name
+
         create_file("__init__.py")
         create_file("Main.pgs", contents=DefaultFiles.main())
-        create_file("Window.pgs", contents=DefaultFiles.window())
+        create_file("Window.py", contents=DefaultFiles.window())
+        create_file(proj_name + "Window.pgs", contents=DefaultFiles.project_window())
         create_file(".pgsproject", contents=DefaultFiles.pgsproject())
