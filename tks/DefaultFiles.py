@@ -17,7 +17,7 @@ begin
     initfunction
     begin
         write """ + '"' + proj_name + """ init"
-		make Window called window  # Calls Window's initfunction automatically
+		make """ + proj_name + """Window called window  # Calls Window's initfunction automatically
     end
 end
 
@@ -71,14 +71,14 @@ def project_window():
 
 # Window Class
 #
-# @author Oli's Programming
-# @date 25/04/16
-#
 # Handles all draw calls and
 # PyGame events
-class """ + proj_name + """Window inherits Window
+class TestWindow inherits Window
 begin
-
+	override initfunction
+	begin
+		write "Game finished."
+	end
 end
 """
 
