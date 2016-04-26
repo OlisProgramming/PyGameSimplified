@@ -172,6 +172,10 @@ See list below for all possible tokens, phrases and their Python translations.</
 <td><code>inherits</code></td>
 <td><code>KWD_INHERITS</code></td>
 </tr>
+<tr>
+<td><code>override</code></td>
+<td><code>KWD_OVERRIDE</code></td>
+</tr>
 </tbody>
 </table>
 
@@ -349,13 +353,19 @@ See list below for all possible tokens, phrases and their Python translations.</
 <td><code>Override Function Str Begin</code></td>
 <td><code>def arg3(self):</br>super().arg3()</code></td>
 <td>
-<code>(ind+)</code> Creates a function with no parameters. Only use inside classes.</td>
+<code>(ind+)</code> Overrides a function with no parameters. Only use inside classes.</td>
 </tr>
 <tr>
 <td><code>Override Function Str ( ... ) Begin</code></td>
 <td><code>def arg3(self, arg4):</br>super().arg3(arg4)</code></td>
 <td>
-<code>(ind+)</code> Creates a function with the parameters of all values in <code>arg4</code>. Only use inside classes.</td>
+<code>(ind+)</code> Overrides a function with the parameters of all values in <code>arg4</code>. Only use inside classes.</td>
+</tr>
+<tr>
+<td><code>Override Initfunction Begin</code></td>
+<td><code>def __init__(self):</br>super().__init__()</code></td>
+<td>
+<code>(ind+)</code> Overrides the <code>initfunction</code> of a class.</td>
 </tr>
 <tr>
 <td><code>Mainfunction Begin</code></td>
