@@ -48,6 +48,9 @@ class Window:
         self.clock = pygame.time.Clock()
         self.running = True
 
+
+    def display_screen(self):
+        print("Window display_screen")
         while self.running:
             event_list = pygame.event.get()
             for event in event_list:
@@ -77,7 +80,18 @@ class TestWindow inherits Window
 begin
 	override initfunction
 	begin
-		write "Game finished."
+		write "Initialising """ + proj_name + """..."
+		# Write code here to be run at the
+		# start of the game.
+		# Once 'display_screen' is run, no
+		# more code will be executed until
+		# the game closes.
+
+		run display_screen
+
+		write """ + '"' + proj_name + """ closed."
+		# Write code here to be run once the
+		# game has closed.
 	end
 end
 """
