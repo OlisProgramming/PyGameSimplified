@@ -83,6 +83,16 @@ See list below for all possible tokens, phrases and their Python translations.</
 <td><code>MATH_MINUS</code></td>
 </tr>
 <tr>
+<td>
+<code>*</code>, <code>Multiply</code> in docs</td>
+<td><code>MATH_MULTIPLY</code></td>
+</tr>
+<tr>
+<td>
+<code>/</code>, <code>Divide</code> in docs</td>
+<td><code>MATH_DIVIDE</code></td>
+</tr>
+<tr>
 <td><code>eval</code></td>
 <td><code>MATH_EVAL</code></td>
 </tr>
@@ -328,16 +338,6 @@ See list below for all possible tokens, phrases and their Python translations.</
 </thead>
 <tbody>
 <tr>
-<td><code>Num Plus Num</code></td>
-<td>Result of addition</td>
-<td>Optimisation code.</td>
-</tr>
-<tr>
-<td><code>Num Minus Num</code></td>
-<td>Result of subtraction</td>
-<td>Optimisation code.</td>
-</tr>
-<tr>
 <td><code>Function Str Begin</code></td>
 <td><code>def arg2(self):</code></td>
 <td>
@@ -483,6 +483,16 @@ See list below for all possible tokens, phrases and their Python translations.</
 <td><code>Set Str To Eval Str/Num Minus Str/Num</code></td>
 <td><code>arg2 = arg5 - arg7</code></td>
 <td>Set value of <code>arg2</code> to value of <code>arg5</code> minus value of <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Eval Str/Num Multiply Str/Num</code></td>
+<td><code>arg2 = arg5 * arg7</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg5</code> multiplied by value of <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Eval Str/Num Divide Str/Num</code></td>
+<td><code>arg2 = arg5 / arg7</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg5</code> divided by value of <code>arg7</code>.</td>
 </tr>
 <tr>
 <td><code>Make Str Called Str</code></td>
