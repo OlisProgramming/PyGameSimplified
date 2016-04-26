@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="PyGame Simplified : A simple, user-friendly programming language that hopes to make game development easier and faster!">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?">
+
+    <title>PyGame Simplified</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/OlisProgramming/PyGameSimplified">View on GitHub</a>
+
+          <h1 id="project_title">PyGame Simplified</h1>
+          <h2 id="project_tagline">A simple, user-friendly programming language that hopes to make game development easier and faster!</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/OlisProgramming/PyGameSimplified/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/OlisProgramming/PyGameSimplified/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="pygamesimplified" class="anchor" href="#pygamesimplified" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PyGame Simplified</h1>
+
+<p>A simple, user-friendly programming language that hopes to make game development easier and faster!
+This project is a PyCharm Community Edition 5.0.4 Project.
+PyGame Simplified (PGS) translates <code>*.pgs</code> files into <code>*.py</code> (Python 3.5) files that <code>import pygame</code>.</p>
+
+<h1>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use</h1>
+
+<p>To create a new project, run <code>SetupProject.py</code>.
+To get PGS to interpret your project and translate it into Python, run <code>Interpreter.py</code>.</p>
+
+<h1>
+<a id="syntax" class="anchor" href="#syntax" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax</h1>
+
+<p>PGS is object-oriented.
+It works around the basis of 'phrases', groups of tokens that connect to form one function or statement.
+See list below for all possible tokens, phrases and their Python translations.</p>
+
+<h2>
+<a id="tokens" class="anchor" href="#tokens" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Tokens</h2>
+
+<p>Here are all of the valid tokens (not organised very well). Token names are as stated in, for example, the source code and error handling messages.</p>
+
+<h3>
+<a id="mathmaths-math_" class="anchor" href="#mathmaths-math_" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Math/Maths (<code>MATH_*</code>)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Symbol/Word</th>
+<th>Token Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Any number (no sign, can be floating point), <code>Num</code>/<code>Number</code> in docs</td>
+<td><code>MATH_NUMBER</code></td>
+</tr>
+<tr>
+<td>
+<code>+</code>, <code>Plus</code> in docs</td>
+<td><code>MATH_PLUS</code></td>
+</tr>
+<tr>
+<td>
+<code>-</code>, <code>Minus</code> in docs</td>
+<td><code>MATH_MINUS</code></td>
+</tr>
+<tr>
+<td>
+<code>*</code>, <code>Multiply</code> in docs</td>
+<td><code>MATH_MULTIPLY</code></td>
+</tr>
+<tr>
+<td>
+<code>/</code>, <code>Divide</code> in docs</td>
+<td><code>MATH_DIVIDE</code></td>
+</tr>
+<tr>
+<td><code>eval</code></td>
+<td><code>MATH_EVAL</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="keywords-kwd_" class="anchor" href="#keywords-kwd_" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Keywords (<code>KWD_*</code>)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Symbol/Word</th>
+<th>Token Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>function</code></td>
+<td><code>KWD_FUNCTION</code></td>
+</tr>
+<tr>
+<td><code>initfunction</code></td>
+<td><code>KWD_INITFUNCTION</code></td>
+</tr>
+<tr>
+<td><code>mainfunction</code></td>
+<td><code>KWD_MAINFUNCTION</code></td>
+</tr>
+<tr>
+<td><code>endprogram</code></td>
+<td><code>KWD_ENDPROGRAM</code></td>
+</tr>
+<tr>
+<td><code>import</code></td>
+<td><code>KWD_IMPORT</code></td>
+</tr>
+<tr>
+<td><code>return</code></td>
+<td><code>KWD_RETURN</code></td>
+</tr>
+<tr>
+<td><code>if</code></td>
+<td><code>KWD_IF</code></td>
+</tr>
+<tr>
+<td><code>elif</code></td>
+<td><code>KWD_ELIF</code></td>
+</tr>
+<tr>
+<td><code>else</code></td>
+<td><code>KWD_ELSE</code></td>
+</tr>
+<tr>
+<td><code>while</code></td>
+<td><code>KWD_WHILE</code></td>
+</tr>
+<tr>
+<td><code>for</code></td>
+<td><code>KWD_FOR</code></td>
+</tr>
+<tr>
+<td><code>in</code></td>
+<td><code>KWD_IN</code></td>
+</tr>
+<tr>
+<td><code>equal</code></td>
+<td><code>KWD_EQUAL</code></td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>KWD_STORE</code></td>
+</tr>
+<tr>
+<td><code>switch</code></td>
+<td><code>KWD_SWITCH</code></td>
+</tr>
+<tr>
+<td><code>case</code></td>
+<td><code>KWD_CASE</code></td>
+</tr>
+<tr>
+<td><code>default</code></td>
+<td><code>KWD_DEFAULT</code></td>
+</tr>
+<tr>
+<td><code>inherits</code></td>
+<td><code>KWD_INHERITS</code></td>
+</tr>
+<tr>
+<td><code>override</code></td>
+<td><code>KWD_OVERRIDE</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="classes-cla_" class="anchor" href="#classes-cla_" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Classes (<code>CLA_*</code>)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Symbol/Word</th>
+<th>Token Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>class</code></td>
+<td><code>CLA_CLASS</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="variables-var_" class="anchor" href="#variables-var_" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Variables (<code>VAR_*</code>)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Symbol/Word</th>
+<th>Token Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set</code></td>
+<td><code>VAR_SET</code></td>
+</tr>
+<tr>
+<td><code>to</code></td>
+<td><code>VAR_TO</code></td>
+</tr>
+<tr>
+<td><code>make</code></td>
+<td><code>VAR_MAKE</code></td>
+</tr>
+<tr>
+<td><code>called</code></td>
+<td><code>VAR_CALLED</code></td>
+</tr>
+<tr>
+<td><code>true</code></td>
+<td><code>VAR_TRUE</code></td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td><code>VAR_FALSE</code></td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td><code>VAR_LIST</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="functions-fun_" class="anchor" href="#functions-fun_" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Functions (<code>FUN_*</code>)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Symbol/Word</th>
+<th>Token Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>write</code></td>
+<td><code>FUN_WRITE</code></td>
+</tr>
+<tr>
+<td><code>run</code></td>
+<td><code>FUN_RUN</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="miscellaneous-misc_" class="anchor" href="#miscellaneous-misc_" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Miscellaneous (<code>MISC_*</code>)</h3>
+
+<table>
+<thead>
+<tr>
+<th>Symbol/Word</th>
+<th>Token Name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>When the end of the file has been reached, <code>Eof</code> in docs</td>
+<td><code>MISC_EOF</code></td>
+</tr>
+<tr>
+<td>Any string of alpha characters or single quote for <code>'s</code> statement, <code>Str</code>/<code>String</code> in docs</td>
+<td><code>MISC_STRING</code></td>
+</tr>
+<tr>
+<td>Any string of characters surrounded by <code>"</code> on both sides (no single quotes, just double). Python escape characters (<code>\n</code>, <code>\t</code>, <code>\"</code>, <code>\\</code>, <code>\r</code>, <code>\uxxxx</code> etc.) are permitted. <code>StrLit</code> in docs.</td>
+<td><code>MISC_STRING_LITERAL</code></td>
+</tr>
+<tr>
+<td><code>begin</code></td>
+<td><code>MISC_BEGIN</code></td>
+</tr>
+<tr>
+<td><code>end</code></td>
+<td><code>MISC_END</code></td>
+</tr>
+<tr>
+<td><code>(</code></td>
+<td><code>MISC_LPARENTH</code></td>
+</tr>
+<tr>
+<td><code>)</code></td>
+<td><code>MISC_RPARENTH</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="phrases" class="anchor" href="#phrases" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Phrases</h2>
+
+<p>Certain sequences of characters do not make phrases (but are still valid), for example, comments, e.g.:</p>
+
+<pre><code># This is a comment.
+
+# This is a multi-line
+# comment. You need a '#'
+# symbol at the start of
+# every line.
+</code></pre>
+
+<p>Here are the other phrases, translations and definitions. When a phrase increases or decreases the resulting indent in Python, the terms <code>(ind+)</code> and <code>(ind-)</code> are used, respectively. <code>arg1</code>, <code>arg2</code> etc refer to the values of the tokens, respectively. For example, the phrase <code>Function Str Begin</code> could be translated from <code>function draw begin</code> into <code>def draw():</code>. If a specific string is required for certain behaviour, it is listed in the Usage column.</p>
+
+<table>
+<thead>
+<tr>
+<th>Phrase</th>
+<th>Translation into Python</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Function Str Begin</code></td>
+<td><code>def arg2(self):</code></td>
+<td>
+<code>(ind+)</code> Creates a function with no parameters. Only use inside classes.</td>
+</tr>
+<tr>
+<td><code>Function Str ( ... ) Begin</code></td>
+<td><code>def arg2(self, arg4):</code></td>
+<td>
+<code>(ind+)</code> Creates a function with the parameters of all values in <code>arg4</code>. Only use inside classes.</td>
+</tr>
+<tr>
+<td><code>Override Function Str Begin</code></td>
+<td><code>def arg3(self):</br>super().arg3()</code></td>
+<td>
+<code>(ind+)</code> Overrides a function with no parameters. Only use inside classes.</td>
+</tr>
+<tr>
+<td><code>Override Function Str ( ... ) Begin</code></td>
+<td><code>def arg3(self, arg4):</br>super().arg3(arg4)</code></td>
+<td>
+<code>(ind+)</code> Overrides a function with the parameters of all values in <code>arg4</code>. Only use inside classes.</td>
+</tr>
+<tr>
+<td><code>Override Initfunction Begin</code></td>
+<td><code>def __init__(self):</br>super().__init__()</code></td>
+<td>
+<code>(ind+)</code> Overrides the <code>initfunction</code> of a class.</td>
+</tr>
+<tr>
+<td><code>Mainfunction Begin</code></td>
+<td><code>if __name__ == '__main__':</code></td>
+<td>
+<code>(ind+)</code> Code that runs if this file is the main file being run. Only use outside classes.</td>
+</tr>
+<tr>
+<td><code>Initfunction Begin</code></td>
+<td><code>def __init__(self):</code></td>
+<td>
+<code>(ind+)</code> Code that runs when an instance of the containing class is created. Only use inside classes.</td>
+</tr>
+<tr>
+<td><code>Endprogram</code></td>
+<td><code>quit()</code></td>
+<td>Quits the program without unloading any data. Use with caution.</td>
+</tr>
+<tr>
+<td><code>Import Str</code></td>
+<td><code>from arg2 import *</code></td>
+<td>Imports code from local file. <em>Exception:</em> <code>arg2</code> is <code>pygame</code>; translates to <code>import pygame</code>.</td>
+</tr>
+<tr>
+<td><code>Return Str/Num/True/False</code></td>
+<td><code>return arg2</code></td>
+<td>Returns value from function. <em>Exception:</em> <code>arg2</code> is a <code>StrLit</code>; translates to <code>return "arg2"</code>
+</td>
+</tr>
+<tr>
+<td><code>If Str Begin</code></td>
+<td><code>if arg2:</code></td>
+<td>
+<code>(ind+)</code> If clause on a (boolean) variable.</td>
+</tr>
+<tr>
+<td><code>If Str Equal Str Begin</code></td>
+<td><code>if arg2 == arg4:</code></td>
+<td>
+<code>(ind+)</code> If clause on whether two variables are equal.</td>
+</tr>
+<tr>
+<td><code>Elif Str Begin</code></td>
+<td><code>elif arg2:</code></td>
+<td>
+<code>(ind+)</code> Elif clause on a (boolean) variable.</td>
+</tr>
+<tr>
+<td><code>Elif Str Equal Str Begin</code></td>
+<td><code>elif arg2 == arg4:</code></td>
+<td>
+<code>(ind+)</code> Elif clause on whether two variables are equal.</td>
+</tr>
+<tr>
+<td><code>Else Begin</code></td>
+<td><code>else:</code></td>
+<td>
+<code>(ind+)</code> Else clause.</td>
+</tr>
+<tr>
+<td><code>While Str Begin</code></td>
+<td><code>while arg2:</code></td>
+<td>
+<code>(ind+)</code> While a (boolean) variable is <code>true</code>, execute block of code.</td>
+</tr>
+<tr>
+<td><code>For Str In Str Begin</code></td>
+<td><code>for arg2 in arg4:</code></td>
+<td>
+<code>(ind+)</code> Iterate over all values in (list/tuple) <code>arg4</code>, setting <code>arg2</code> to the value each iteration.</td>
+</tr>
+<tr>
+<td><code>Class Str Begin</code></td>
+<td><code>class arg2:</code></td>
+<td>
+<code>(ind+)</code> Create a new class named <code>arg2</code>, not inheriting any other class.</td>
+</tr>
+<tr>
+<td><code>Class Str Inherits Str Begin</code></td>
+<td><code>class arg2(arg4):</code></td>
+<td>
+<code>(ind+)</code> Create a new class named <code>arg2</code>, inheriting <code>arg4</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Str</code></td>
+<td><code>arg2 = arg4</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg4</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To StrLit</code></td>
+<td><code>arg2 = "arg4"</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg4</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Num</code></td>
+<td><code>arg2 = arg4</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg4</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To True</code></td>
+<td><code>arg2 = true</code></td>
+<td>Set value of <code>arg2</code> to <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To False</code></td>
+<td><code>arg2 = false</code></td>
+<td>Set value of <code>arg2</code> to <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Eval Str/Num Plus Str/Num</code></td>
+<td><code>arg2 = arg5 + arg7</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg5</code> plus value of <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Eval Str/Num Minus Str/Num</code></td>
+<td><code>arg2 = arg5 - arg7</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg5</code> minus value of <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Eval Str/Num Multiply Str/Num</code></td>
+<td><code>arg2 = arg5 * arg7</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg5</code> multiplied by value of <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Set Str To Eval Str/Num Divide Str/Num</code></td>
+<td><code>arg2 = arg5 / arg7</code></td>
+<td>Set value of <code>arg2</code> to value of <code>arg5</code> divided by value of <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Make Str Called Str</code></td>
+<td><code>arg4 = arg2()</code></td>
+<td>Set value of <code>arg4</code> to a default-constructed <code>arg2</code>.</td>
+</tr>
+<tr>
+<td><code>Make List ( ... ) Called Str</code></td>
+<td><code>arg7 = (arg4)</code></td>
+<td>Set value of <code>arg7</code> to a list of all of the values between <code>(</code> and <code>)</code>, separated by whitespace.</td>
+</tr>
+<tr>
+<td><code>Write Str/Num</code></td>
+<td><code>print(arg2)</code></td>
+<td>Print value of <code>arg2</code> to the screen.</td>
+</tr>
+<tr>
+<td><code>Write StrLit</code></td>
+<td><code>print("arg2")</code></td>
+<td>Print value of <code>arg2</code> to the screen.</td>
+</tr>
+<tr>
+<td><code>Write True</code></td>
+<td><code>print("true")</code></td>
+<td>Print <code>"true"</code> to the screen.</td>
+</tr>
+<tr>
+<td><code>Write False</code></td>
+<td><code>print("false")</code></td>
+<td>Print <code>"false"</code> to the screen.</td>
+</tr>
+<tr>
+<td><code>Run Str</code></td>
+<td><code>arg2()</code></td>
+<td>Runs function <code>arg2</code>.</td>
+</tr>
+<tr>
+<td><code>Run Str ( ... )</code></td>
+<td><code>arg2(arg4)</code></td>
+<td>Run function <code>arg2</code> with arguments of a list of all of the values between <code>(</code> and <code>)</code>, separated by whitespace.</td>
+</tr>
+<tr>
+<td><code>Store Str In Str</code></td>
+<td><code>arg2()</code></td>
+<td>Run function <code>arg2</code>, and store result in <code>arg4</code>.</td>
+</tr>
+<tr>
+<td><code>Store Str ( ... ) In Str</code></td>
+<td><code>arg2(arg4)</code></td>
+<td>Run function <code>arg2</code> with arguments of a list of all of the values between <code>(</code> and <code>)</code>, separated by whitespace, and store result in <code>arg7</code>.</td>
+</tr>
+<tr>
+<td><code>Switch Str</code></td>
+<td>Returns nothing</td>
+<td>Initialise switch statement made of <code>if/elif/else</code> blocks. Store arg2 in <code>switch_arg</code>. <em>Note:</em> <code>switch</code> statements cannot yet be nested.</td>
+</tr>
+<tr>
+<td><code>Case Str Begin</code></td>
+<td><code>if/elif switch_arg == arg2:</code></td>
+<td>
+<code>(ind+)</code> Switch Case statement on <code>arg2</code>.</td>
+</tr>
+<tr>
+<td><code>Case Default Begin</code></td>
+<td><code>else:</code></td>
+<td>
+<code>(ind+)</code> Switch Case default statement.</td>
+</tr>
+<tr>
+<td><code>End</code></td>
+<td>Returns nothing</td>
+<td>
+<code>(ind-)</code> Signals end of indented block.</td>
+</tr>
+</tbody>
+</table>
+
+<h1>
+<a id="naming-and-spacing-conventions" class="anchor" href="#naming-and-spacing-conventions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Naming and Spacing Conventions</h1>
+
+<p>All of these are optional, but give clarity.</p>
+
+<h2>
+<a id="naming" class="anchor" href="#naming" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Naming</h2>
+
+<ul>
+<li>Class names and file names: <code>UpperCamelCase</code>
+</li>
+<li>Function names and variables: <code>lower_underscore</code>
+</li>
+<li>Constants: <code>UPPER_UNDERSCORE</code>
+</li>
+</ul>
+
+<h2>
+<a id="spacing" class="anchor" href="#spacing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Spacing</h2>
+
+<ul>
+<li>Indentation: Indent four spaces after a <code>begin</code> statement.</li>
+<li>Outdentation: Outdent four spaces just before an <code>end</code> statement.</li>
+<li>Line spaces: Each <code>begin</code> and <code>end</code> statement should have their own new line.</li>
+<li>Furthermore, phrases should not share lines with other phrases, and they should not span more than one line, except in cases of very long lines (over 79 chars).</li>
+<li>Comments: Place comments two or more spaces away from code. One space only should be allowed after the <code>#</code> symbol before commented documentation.</li>
+<li>Use long continuous lines of <code>#</code>s (over 10) to separate parts of code.</li>
+<li>To title certain parts of code, use 5 <code>#</code>s then the title name in all caps then 5 <code>#</code>s again, e.g.:</br><code>##### DRAW CALLS #####</code>
+</li>
+<li>Between classes/functions: allow two line breaks between two classes, two functions or the beginning of a class. Documentation in comments counts as lines IN the class/function.</li>
+<li>Inline Documentation: Documentation should be immediately one line before the item it is documenting, leaving one blank line before it to separate it from previous code. Classes should have class name on the first line of documentation, then an empty line (still with <code>#</code> symbol), then further documentation. Certain documentation items can be given using this set of annotations:
+
+<ul>
+<li>
+<code>@author NAME</code> states who authored the file.</li>
+<li>
+<code>@date DD/MM/YY</code> is the date the file was CREATED, not last updated.</li>
+<li>
+<code>@param NAME</code> is a parameter or argument to a specific function.</li>
+<li>
+<code>@return VAR_TYPE NAME</code> or <code>@return NAME</code> shows what this function returns, e.g. <code>@return StrLit greeting</code>. It is recommended to use <code>@return Str/String</code> as opposed to <code>@return StrLit</code> because Python does not support pointers to variables (so the <code>String</code> keyword would be unused)</li>
+<li>
+<code>@todo</code> is what the user indends to add in the future.</li>
+<li>
+<code>@see FILE_NAME/CLASS_NAME</code> recommends to the user to also look at said file/class for extra information.</li>
+<li>
+<code>@see CLASS_NAME's FUNCTION_NAME/VARIABLE_NAME</code> is as above but shows functions and variables instead.</li>
+</ul>
+</li>
+</ul>
+
+<p>Examples of these rules in action:</p>
+
+<pre><code>import Window  # Window.pgs
+
+
+# Main class
+#
+# @author Oli's Programming
+# @date 24/04/16
+# Main class for sample PGS project.
+class Main
+begin
+    initfunction
+    begin
+        write "Main init"
+
+        # @see Main's write_hello
+        # This is where "hello_message" is used.
+        set my hello_message to "hello"
+    end
+
+
+    # Writes "hello" to the screen.
+    #
+    # @return StrLit hello_message
+    # The message that was just written to the screen.
+    #
+    # @todo add the user's name, to write for example "hello, user!"
+    function write_hello
+    begin
+        write hello_message  # and do something else
+        return hello_message
+    end
+end
+</code></pre>
+
+<h1>
+<a id="example-code" class="anchor" href="#example-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Code</h1>
+
+<p>Here are some example code files, showing usage of code, phrases and stylistic conventions.</p>
+
+<h2>
+<a id="mainpgs" class="anchor" href="#mainpgs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>Main.pgs</code>
+</h2>
+
+<pre><code>import Window  # Window.pgs
+
+# Main class
+#
+# @author Oli's Programming
+# @date 24/04/16
+#
+# Handles window instance and is run
+# as a single instance when
+# the program is started
+class Main
+begin
+    initfunction
+    begin
+        write "Main init"
+        make Window called window  # Calls Window's initfunction automatically
+    end
+end
+
+
+mainfunction  # Runs at program start
+begin
+    make Main called main  # Calls Main's initfunction automatically
+end
+</code></pre>
+
+<h2>
+<a id="windowpgs" class="anchor" href="#windowpgs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><code>Window.pgs</code>
+</h2>
+
+<pre><code>import pygame  # Module for windows and apps
+
+# Window class
+#
+# @author Oli's Programming
+# @date 24/04/16
+#
+# Handles draw calls and
+# PyGame events
+# Is owned by the Main class
+# @see Main
+class Window
+begin
+    initfunction
+    begin
+        write "Window init"
+        run pygame's init  # Initialise PyGame
+        make list (640 480) called size  # Set window size to 640x480
+
+        store pygame's display's set_mode(size) in my hwnd  # Store window in hwnd
+
+        set my title to """ + '"' + proj_name + '"' + """
+        run pygame's display's set_caption(my title)  # Set title to """ + '"' + proj_name + '"' + """
+
+        make list (255 255 255) called my background_color  # Set background colour to white
+        make pygame's time's Clock called my clock  # Make a clock to record FPS and time since last frame
+        set my running to true  # Game is still running
+
+        ########################################
+
+        while my running  # Main Loop
+        begin
+            ##### EVENTS #####
+            store pygame's event's get in eventlist
+            for event in eventlist  # Get all events since last frame
+            begin
+                switch event's type
+                case pygame's QUIT  # User pressed 'X' button
+                begin
+                    set my running to false
+                end
+                case pygame's KEYDOWN  # User pressed a key down
+                begin
+                    write "Key Down!"
+                end
+            end
+
+            ##### DRAWING #####
+            run my hwnd's fill (my background_color)  # Fill background with 'my background_color'
+            run pygame's display's flip  # Flip sprites drawn onto screen
+            run my clock's tick (60)  # Delay so that frames never exceed 60FPS
+        end
+    end
+end
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">PyGame Simplified maintained by <a href="https://github.com/OlisProgramming">OlisProgramming</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
