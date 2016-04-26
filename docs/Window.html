@@ -38,10 +38,19 @@
 <h2>Import statements</h2>
 <p>These are the other classes or files that this one depends on.
 <ul>
-  <li><a href="pygame.html">pygame</a></li>
+  <li><a href="pygame.html"><code>pygame</code></a></li>
 </ul>
 
 <h2>Functions</h2>
+<h3>initfunction</h3>
+<p>Initialises <code>pygame</code> with a screen size of 640x480. Sets the window title to the project's name, but this cannot be changed at runtime. Sets up a background colour fill of white, but this variable can be changed at runtime. Sets up a <code>pygame Clock</code> to limit FPS to 60.</p>
+
+<h3>display_screen</h3>
+<p>Called manually once everything has been set up ready for the screen to be launched. Normally this can just be called at the end of the <code>initfunction</code> of a class inheriting this one (usually called the project name, with <code>Window</code> appended).</p>
+<p>Inside a <code>while</code> loop (with the condition that variable <code>my running</code> is <code>true</code>), calls the functions named after the events since the last frame, e.g. the <code>KEYDOWN</code> event calls the <code>key_down</code> function on itself. It then fills the background with its <code>background_color</code>, flips the display on-screen and limits the frames to 60FPS using its <code>Clock</code>.</p>
+
+<h3>key_down (event)</h3>
+<p>Called when a key is pressed. Does nothing; it is left for the <code>inherit</code>ing class to implement.</p>
 
       </section>
     </div>
