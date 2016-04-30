@@ -259,6 +259,11 @@ class Interpreter(object):
                 self.line()
                 continue
 
+            elif self.current_char == "@":
+                self.advance()
+                self.string()
+                continue
+
             Interpreter.error("Invalid token (Valid types are e.g. NUMBER, PLUS, MINUS etc.): got " + self.current_char)
 
         self.eof = True
