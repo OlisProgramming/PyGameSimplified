@@ -208,10 +208,13 @@ class Interpreter(object):
                 else:
                     prefix = self.next_token_prefix
                     if word[-2:] == "'s":
-                        if word == "super's":
+                        if word == "parent's":
                             self.next_token_prefix = ""
                             next_token = self.get_next_token()
-                            return Token(MISC_STRING, prefix + "super()." + next_token.value)
+                            if next_token.value == "initfunction":
+                                return Token(MISC_STRING, prefix + "super().__init__")
+                            else:
+                                return Token(MISC_STRING, prefix + "super()." + next_token.value)
                         else:
                             self.next_token_prefix = ""
                             next_token = self.get_next_token()
@@ -308,8 +311,7 @@ class Interpreter(object):
                     self.arg4 = self.current_token
                     if self.eat(MISC_BEGIN):
                         self.indent += 1
-                        return "def " + self.arg3.value + "(self):\n" + self.indent*'    ' + \
-                               "super()." + self.arg3.value + "()"  # Override Function Str Begin
+                        return "def " + self.arg3.value + "(self):"  # Override Function Str Begin
                     elif self.eat(MISC_LPARENTH):
                         self.arg5 = self.current_token
                         self.arg5.value = str(self.arg5.value) + ", "
@@ -321,9 +323,7 @@ class Interpreter(object):
                             self.arg7 = self.current_token
                             if self.eat(MISC_BEGIN):
                                 self.indent += 1
-                                return "def " + self.arg3.value + "(self, " + self.arg5.value[:-5] + "):\n" + \
-                                       self.indent*'    ' + "super()." + self.arg3.value + "(" + \
-                                       self.arg5.value[:-5] + ")"
+                                return "def " + self.arg3.value + "(self, " + self.arg5.value[:-5] + "):"
                                 # Override Function Str ( ... ) Begin
                             else:
                                 self.invalid(7)
@@ -337,7 +337,7 @@ class Interpreter(object):
                 self.arg3 = self.current_token
                 if self.eat(MISC_BEGIN):
                     self.indent += 1
-                    return "def __init__(self):\n" + self.indent*'    ' + "super().__init__()"
+                    return "def __init__(self):"
             else:
                 self.invalid(2)
 

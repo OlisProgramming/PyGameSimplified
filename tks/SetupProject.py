@@ -39,6 +39,7 @@ Please type the project name to confirm (no spaces or non-alpha characters), or 
 
         create_file("__init__.py")
         create_file("Main.pgs", contents=DefaultFiles.main())
+        create_file("Color.py", contents=DefaultFiles.color())
         create_file("Window.py", contents=DefaultFiles.window())
         create_file(proj_name + "Window.pgs", contents=DefaultFiles.project_window())
         create_file(".pgsproject", contents=DefaultFiles.pgsproject())
