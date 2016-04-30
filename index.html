@@ -587,7 +587,7 @@ See list below for all possible tokens, phrases and their Python translations.</
 <li>To title certain parts of code, use 5 <code>#</code>s then the title name in all caps then 5 <code>#</code>s again, e.g.:</br><code>##### DRAW CALLS #####</code>
 </li>
 <li>Between classes/functions: allow two line breaks between two classes, two functions or the beginning of a class. Documentation in comments counts as lines IN the class/function.</li>
-<li>Inline Documentation: Documentation should be immediately one line before the item it is documenting, leaving one blank line before it to separate it from previous code. Classes should have class name on the first line of documentation, then an empty line (still with <code>#</code> symbol), then further documentation. Certain documentation items can be given using this set of annotations:
+<li>Inline Documentation: Documentation should be immediately one line before the item it is documenting, leaving one blank line before it to separate it from previous code. Classes should have class name on the first line of documentation, then an empty line (still with <code>#</code> symbol), then further documentation. Certain documentation items can be given using this set of annotations (with NO hash symbol):
 
 <ul>
 <li>
@@ -604,6 +604,8 @@ See list below for all possible tokens, phrases and their Python translations.</
 <code>@see FILE_NAME/CLASS_NAME</code> recommends to the user to also look at said file/class for extra information.</li>
 <li>
 <code>@see CLASS_NAME's FUNCTION_NAME/VARIABLE_NAME</code> is as above but shows functions and variables instead.</li>
+<li>
+<code>@override</code> shows that this overrides another (<code>parent</code>) function. This annotation only should be on the same line as the function definition, e.g. <code>@override initfunction</code> (no newline).</li>
 </ul>
 </li>
 </ul>
@@ -615,8 +617,8 @@ See list below for all possible tokens, phrases and their Python translations.</
 
 # Main class
 #
-# @author Oli's Programming
-# @date 24/04/16
+@author # Oli's Programming
+@date # 24/04/16
 # Main class for sample PGS project.
 class Main
 begin
@@ -624,7 +626,7 @@ begin
     begin
         write "Main init"
 
-        # @see Main's write_hello
+        @see Main's write_hello
         # This is where "hello_message" is used.
         set my hello_message to "hello"
     end
@@ -632,13 +634,13 @@ begin
 
     # Writes "hello" to the screen.
     #
-    # @return StrLit hello_message
+    @return String hello_message
     # The message that was just written to the screen.
     #
-    # @todo add the user's name, to write for example "hello, user!"
+    @todo # add the user's name, to write for example "hello, user!"
     function write_hello
     begin
-        write hello_message  # and do something else
+        write hello_message  # and possibly do something else
         return hello_message
     end
 end
