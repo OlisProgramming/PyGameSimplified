@@ -1,5 +1,5 @@
 import time
-from tks import DefaultFiles
+from pgs import DefaultFiles
 
 
 def create_file(path, contents=""):

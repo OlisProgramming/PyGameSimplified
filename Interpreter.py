@@ -1,4 +1,4 @@
-from tks.Token import *
+from pgs.Token import *
 
 
 class Interpreter(object):
