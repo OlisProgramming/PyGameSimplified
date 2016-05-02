@@ -597,7 +597,7 @@ See list below for all possible tokens, phrases and their Python translations.</
 <li>
 <code>@param NAME</code> is a parameter or argument to a specific function.</li>
 <li>
-<code>@return VAR_TYPE NAME</code> or <code>@return NAME</code> shows what this function returns, e.g. <code>@return StrLit greeting</code>. It is recommended to use <code>@return Str/String</code> as opposed to <code>@return StrLit</code> because Python does not support pointers to variables (so the <code>String</code> keyword would be unused)</li>
+<code>@return VAR_TYPE NAME</code> or <code>@return NAME</code> shows what this function returns, e.g. <code>@return StrLit greeting</code>. It is recommended to use <code>@return Str/String</code> as opposed to <code>@return StrLit</code> because Python does not support pointers to variables (so the <code>String</code> keyword would be unused). Do NOT put extra code on the same line as annotations (it will be marked as comments)</li>
 <li>
 <code>@todo</code> is what the user indends to add in the future.</li>
 <li>
@@ -605,7 +605,7 @@ See list below for all possible tokens, phrases and their Python translations.</
 <li>
 <code>@see CLASS_NAME's FUNCTION_NAME/VARIABLE_NAME</code> is as above but shows functions and variables instead.</li>
 <li>
-<code>@override</code> shows that this overrides another (<code>parent</code>) function. This annotation only should be on the same line as the function definition, e.g. <code>@override initfunction</code> (no newline).</li>
+<code>@override</code> shows that this overrides another (<code>parent</code>) function.</li>
 </ul>
 </li>
 </ul>
@@ -617,8 +617,8 @@ See list below for all possible tokens, phrases and their Python translations.</
 
 # Main class
 #
-@author # Oli's Programming
-@date # 24/04/16
+@author Oli's Programming
+@date 24/04/16
 # Main class for sample PGS project.
 class Main
 begin
@@ -637,7 +637,7 @@ begin
     @return String hello_message
     # The message that was just written to the screen.
     #
-    @todo # add the user's name, to write for example "hello, user!"
+    @todo add the user's name, to write for example "hello, user!"
     function write_hello
     begin
         write hello_message  # and possibly do something else
