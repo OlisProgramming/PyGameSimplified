@@ -1,5 +1,6 @@
 # PyGame Simplified
 ***This project is now deprecated. Please see [this project](https://github.com/OlisProgramming/AppDevLanguage) instead!***
+
 **This README file is out of date. See [the website](http://olisprogramming.github.io/PyGameSimplified/) instead for information!**
 
 
